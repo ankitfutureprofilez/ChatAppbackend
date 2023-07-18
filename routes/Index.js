@@ -11,6 +11,8 @@ routes.post('/signup', signups.Singup)
 
 routes.post('/login', signups.Login)
 
+routes.get('/chats',verifyUserToken,signups.userlist)
+
 
 routes.post('/chat', verifyUserToken, Chats.Chat)
 

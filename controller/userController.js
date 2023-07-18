@@ -8,16 +8,16 @@ exports.Singup = (async (req, res) => {
         const { name, email, password, username, confirmPassword } = req.body
         const lastuserid = await Users.findOne({}, "userId").sort({ userId: -1 });
         const newUserId = lastuserid ? lastuserid.userId + 1 : 1;
-        console.log(newUserId)
+      //  console.log(newUserId)
         let isAlready = await Users.findOne({ username: username });
-        console.log(isAlready)
+      //  console.log(isAlready)
         if (isAlready) {
             return res.status(400).json({
                 msg: "That user already exisits!",
                 status: false
             });
         }
-        console.log("last", lastuserid)
+      ///  console.log("last", lastuserid)
 
         //        Insert the new user if they do not exist yet
         let user = new Users({
@@ -30,7 +30,7 @@ exports.Singup = (async (req, res) => {
         });
         const results = await user.save();
 
-        console.log("result", results);
+       // console.log("result", results);
         if (results) {
             return res.status(200).json({
                 msg: "Successfully created !!",
@@ -50,12 +50,12 @@ exports.Singup = (async (req, res) => {
 
 
 exports.Login = (async (req, res) => {
-    //  console.log(req.body)
+   // console.log(req.body)
     try {
         const { username, password } = req.body
         const user = await Users.findOne({ username: username });
         const isPassword = await Users.findOne({ password: password });
-        console.log(user, isPassword)
+      //  console.log(user, isPassword)
         if (!user || !isPassword) {
             res.json({
                 status: false,
@@ -81,4 +81,26 @@ exports.Login = (async (req, res) => {
             status: "falied"
         });
     }
+})
+
+
+exports.userlist = (async (req, res) => {
+    try {
+        const record = await Users.find({})
+       // console.log(record)
+
+        res.json({
+            data: record,
+            msg: "success",
+            status: 200
+        })
+    } catch (error) {
+        console.log(error)
+        res.json({
+            error:error,
+            status:400,
+            msg:"do not access"
+        })
+    }
+
 })

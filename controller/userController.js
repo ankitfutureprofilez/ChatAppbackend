@@ -3,9 +3,9 @@ var jwt = require('jsonwebtoken');
 require('dotenv').config()
 
 exports.Singup = (async (req, res) => {
-    console.log(req.body)
+  //  console.log(req.body)
     try {
-        const { name, email, password, username, confirmPassword } = req.body
+        const { name, email, password, username, confirmpasword } = req.body
         const lastuserid = await Users.findOne({}, "userId").sort({ userId: -1 });
         const newUserId = lastuserid ? lastuserid.userId + 1 : 1;
       //  console.log(newUserId)
@@ -26,7 +26,7 @@ exports.Singup = (async (req, res) => {
             name: name,
             email: email,
             password: password,
-            confirmPassword: confirmPassword
+            confirmpasword:confirmpasword
         });
         const results = await user.save();
 
@@ -50,12 +50,12 @@ exports.Singup = (async (req, res) => {
 
 
 exports.Login = (async (req, res) => {
-   // console.log(req.body)
+ console.log(req.body)
     try {
         const { username, password } = req.body
         const user = await Users.findOne({ username: username });
         const isPassword = await Users.findOne({ password: password });
-      //  console.log(user, isPassword)
+  // console.log(user, isPassword)
         if (!user || !isPassword) {
             res.json({
                 status: false,
@@ -75,7 +75,7 @@ exports.Login = (async (req, res) => {
 
 
     } catch (error) {
-        console.log(error)
+        //console.log(error)
         res.status(200).json({
             msg: error,
             status: "falied"
@@ -87,7 +87,7 @@ exports.Login = (async (req, res) => {
 exports.userlist = (async (req, res) => {
     try {
         const record = await Users.find({})
-       // console.log(record)
+    // console.log(record)
 
         res.json({
             data: record,

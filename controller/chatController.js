@@ -5,6 +5,7 @@ exports.Chat = async (req, res) => {
   try {
     const reciverid = req.body.userid;
     const user = req.user.userId;
+    const io = req.io;
     console.log("reciverid", reciverid);
     console.log(reciverid, user);
     let messageResult = new Chat({
@@ -15,6 +16,7 @@ exports.Chat = async (req, res) => {
     const messagereq = await messageResult.save();
     //console.log(reciverid,user,messagereq)
     // Emit the message to the recipient's socket
+    console.log("io", io)
     io.emit(`user-1`, "hello");
     res.json({
       reciverid: reciverid,

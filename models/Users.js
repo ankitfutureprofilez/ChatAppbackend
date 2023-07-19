@@ -21,12 +21,12 @@ const regSchema = mongoose.Schema({
     },
     email: String,
     password: {
-        type: String,
-        select: false
+        type: Number
+
     },
-    confirmPassword: {
-        type: String,
-        select: false
+    confirmpasword: {
+        type: Number
+
     }
 
 

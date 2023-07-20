@@ -1,37 +1,41 @@
 const Chat = require('../models/Messages')
 const Usermodel = require('../models/Users')
 
+// controllers/chatController.js
+
 exports.Chat = async (req, res) => {
   try {
     const reciverid = req.body.userid;
     const user = req.user.userId;
-    const io = req.io;
-    console.log("reciverid", reciverid);
+
+    console.log('reciverid', reciverid);
     console.log(reciverid, user);
-    let messageResult = new Chat({
+
+    const messageResult = new Chat({
       message: req.body.message,
       sender: user,
     });
-    console.log(messageResult)
+
     const messagereq = await messageResult.save();
-    //console.log(reciverid,user,messagereq)
+
     // Emit the message to the recipient's socket
-    console.log("io", io)
-    io.emit(`user-1`, "hello");
+   // req.app.get('io').to(reciverid).emit('recive-messgae', { message: req.body.message, sender: user });
+
     res.json({
       reciverid: reciverid,
       status: 200,
       success: true,
-      message: messagereq
+      message: messagereq,
     });
   } catch (err) {
     console.log(err);
     res.json({
       success: false,
-      message: err
+      message: err,
     });
   }
 };
+
 
 
 exports.chatshow = (

@@ -1,11 +1,12 @@
-const mongoose = require("mongoose")
-const regSchema = mongoose.Schema({
-    message: {
-        type: String
-    },
-    userid:{
-        type:Number
-    }
-})
-const Mesages = mongoose.model('messages', regSchema);
-module.exports = Mesages;
+// models/Chat.js
+const mongoose = require('mongoose');
+
+const chatSchema = new mongoose.Schema({
+  message: String,
+  userId: String,
+  createdAt: { type: Date, default: Date.now },
+});
+
+const Chat = mongoose.model('messages', chatSchema);
+
+module.exports = Chat;

@@ -1,48 +1,49 @@
-const express = require("express");
+const express = require("express")
+
 const app = express()
+require("dotenv").config()
+const http = require("http")
 
-const http = require('http')
-const cors = require("cors");
-const jwt = require('jsonwebtoken');
-const api = require('./routes/Index')
-const { Server } = require("socket.io")
-app.use(express.json())
+const cors = require("cors")
+
 app.use(cors())
-require('dotenv').config()
+app.use(express.json())
+const apirouter=require("./routes/Index")
 
-const mongoose = require("mongoose")
+app.use(apirouter)
+
+const mongoose=require("mongoose")
 mongoose.connect(`${process.env.DB_URL}`)
-app.use('/api', api);
+const { Server } = require("socket.io")
 const server = http.createServer(app)
 
 const io = new Server(server, {
     cors: {
         origin: "http://localhost:3000",
-        method: ["GET", "POST"]
+        method: ["GET", "POST"],
     },
 })
 
 
 io.on("connection", (socket) => {
-    console.log(`User Connected ${socket.id}`);
+    console.log(`user connected ${socket.id}`)
 
     socket.on("join-room", (data) => {
-        socket.join(data);0
-        console.log(`user Connected ${socket.id} data ${data}`)
+        socket.join(data);
+        console.log(`userId is:${socket.id} join-room ${data}`)
     })
-    socket.on("send-message", (data) => {
-        socket.emit("recive-message", data)
 
-    })
-    socket.on("disconnect", () => {
-        console.log("User DisConnected", socket.id)
+    socket.on("send-message", ({messageData,data}) => {
+        console.log("Received message:", messageData);
+        io.emit("receive-message", messageData,data);
+      });
+
+    socket.on("disconnection", () => {
+        console.log("userDisconnect", socket.id);
     })
 })
 
-server.listen(process.env.PORT, () => { console.log(`server is run  ${process.env.PORT}`) })
+const port = process.env.PORT
 
 
-
-
-
-
+server.listen(port, () => { console.log(`server is run  ${port}`) })

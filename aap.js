@@ -31,11 +31,9 @@ io.on("connection", (socket) => {
     socket.on("join-room", (data) => {
         socket.join(data);
         console.log(`userId is:${socket.id} join-room ${data}`)
-    })
-
-    socket.on("send-message", ({messageData,data}) => {
-        console.log("Received message:", messageData);
-        io.emit("receive-message", messageData,data);
+    });
+    socket.on("send-message", (data) => {
+        io.emit("receive-message", data);
       });
 
     socket.on("disconnection", () => {

@@ -7,7 +7,9 @@ const server = http.createServer(app);
 require('dotenv').config()
 const { Server } = require('socket.io');
 const mongoose = require("mongoose")
-
+app.use(express.json())
+const apirouter= require('./routes/Index')
+app.use(apirouter)
 mongoose.connect(`${process.env.DB_URL}`)
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 
@@ -36,7 +38,7 @@ io.on('connection', (socket) => {
             const savedMessage = await chatMessage.save();
 
             // Emit the message to the recipient's socket
-            io.to(data.receiverId).emit('receive-message', { message: data.message, senderId: data.senderId });
+            socket.broadcast.to(data.userId).emit('receive-message', { message: data.message, senderId: data.senderId });
             console.log("recive-mesage", data.message)
             console.log('Message saved and emitted:', savedMessage);
         } catch (err) {

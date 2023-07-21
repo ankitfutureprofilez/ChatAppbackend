@@ -1,47 +1,60 @@
-const express = require("express")
+// app.js
 
-const app = express()
-require("dotenv").config()
-const http = require("http")
+const express = require('express');
+const http = require('http');
+const app = express();
+const server = http.createServer(app);
+require('dotenv').config()
+const { Server } = require('socket.io');
+const mongoose = require("mongoose")
 
-const cors = require("cors")
-
-app.use(cors())
-app.use(express.json())
-const apirouter=require("./routes/Index")
-
-app.use(apirouter)
-
-const mongoose=require("mongoose")
 mongoose.connect(`${process.env.DB_URL}`)
-const { Server } = require("socket.io")
-const server = http.createServer(app)
+const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
-        method: ["GET", "POST"],
+        origin: 'http://localhost:3000', // Change this to the frontend's URL
+        methods: ['GET', 'POST'],
     },
-})
+});
 
+io.on('connection', (socket) => {
+    console.log(`user connected ${socket.id}`);
 
-io.on("connection", (socket) => {
-    console.log(`user connected ${socket.id}`)
-
-    socket.on("join-room", (data) => {
+    socket.on('join-room', (data) => {
         socket.join(data);
-        console.log(`userId is:${socket.id} join-room ${data}`)
+        console.log(`userId is: ${socket.id} join-room ${data}`);
     });
-    socket.on("send-message", (data) => {
-        io.emit("receive-message", data);
-      });
 
-    socket.on("disconnection", () => {
-        console.log("userDisconnect", socket.id);
-    })
-})
+    socket.on('send-message', async (data) => {
+        try {
+            // Save the message to the database
+            const chatMessage = new Chat({
+                message: data.message,
+                userId: data.senderId,
+            });
+            const savedMessage = await chatMessage.save();
 
-const port = process.env.PORT
+            // Emit the message to the recipient's socket
+            io.to(data.receiverId).emit('receive-message', { message: data.message, senderId: data.senderId });
+            console.log("recive-mesage", data.message)
+            console.log('Message saved and emitted:', savedMessage);
+        } catch (err) {
+            console.log(err);
+        }
+    });
+
+    socket.on('disconnect', () => {
+        console.log('userDisconnect', socket.id);
+    });
+});
 
 
-server.listen(port, () => { console.log(`server is run  ${port}`) })
+
+
+// Start the server
+const PORT = process.env.PORT; // Change this to the desired port
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+

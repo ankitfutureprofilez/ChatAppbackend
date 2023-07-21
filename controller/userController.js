@@ -50,7 +50,7 @@ exports.Singup = (async (req, res) => {
 
 
 exports.Login = (async (req, res) => {
-
+   
     console.log(req.body)
     try {
         const { username, password } = req.body

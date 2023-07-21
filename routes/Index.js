@@ -14,7 +14,7 @@ routes.post('/login', signups.Login)
 routes.get('/chats',verifyUserToken,signups.userlist)
 
 
-routes.post('/chat', verifyUserToken, Chats.Chat)
+routes.post('/chat', verifyUserToken, Chats.sendMessage)
 
 routes.get('/chat', verifyUserToken, Chats.chatshow)
 

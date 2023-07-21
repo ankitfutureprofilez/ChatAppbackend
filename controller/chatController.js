@@ -3,29 +3,35 @@ const Usermodel = require('../models/Users')
 
 // controllers/chatController.js
 
-exports.Chat = async (req, res) => {
+// chatController.js
+
+// Assuming the correct path to your Messages model
+
+// chatController.js
+
+exports.sendMessage = async (req, res) => {
   try {
-    const reciverid = req.body.userid;
-    const user = req.user.userId;
+    const userId = req.body.receiverId;
+    const senderId = req.user.userId; // Assuming the authenticated user's ID is available in req.user.userId
 
-    console.log('reciverid', reciverid);
-    console.log(reciverid, user);
+    console.log('receiverId', userId);
+    console.log('senderId', senderId);
 
-    const messageResult = new Chat({
+    const chatMessage = new Chat({
       message: req.body.message,
-      sender: user,
+      userId: senderId,
     });
 
-    const messagereq = await messageResult.save();
+    const savedMessage = await chatMessage.save();
 
     // Emit the message to the recipient's socket
-   // req.app.get('io').to(reciverid).emit('recive-messgae', { message: req.body.message, sender: user });
+    io.to(receiverId).emit('receive-message', { message: req.body.message, senderId });
 
     res.json({
-      reciverid: reciverid,
+      receiverId: userId,
       status: 200,
       success: true,
-      message: messagereq,
+      message: savedMessage,
     });
   } catch (err) {
     console.log(err);
@@ -38,8 +44,10 @@ exports.Chat = async (req, res) => {
 
 
 
+
 exports.chatshow = (
   async (req, res) => {
+    console.log(req.params.userId)
     try {
       const user = await Usermodel.findOne({}); // Modify the query to fetch the user based on your requirements
 

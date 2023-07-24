@@ -3,13 +3,15 @@
 const express = require('express');
 const http = require('http');
 const app = express();
+const cors = require("cors")
+app.use(cors())
 const server = http.createServer(app);
 require('dotenv').config()
 const { Server } = require('socket.io');
 const mongoose = require("mongoose")
 app.use(express.json())
-const apirouter= require('./routes/Index')
-app.use(apirouter)
+const apirouter = require('./routes/Index')
+app.use("/api", apirouter)
 mongoose.connect(`${process.env.DB_URL}`)
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 
@@ -19,7 +21,6 @@ const io = new Server(server, {
         methods: ['GET', 'POST'],
     },
 });
-
 io.on('connection', (socket) => {
     console.log(`user connected ${socket.id}`);
 
@@ -27,29 +28,49 @@ io.on('connection', (socket) => {
         socket.join(data);
         console.log(`userId is: ${socket.id} join-room ${data}`);
     });
-
     socket.on('send-message', async (data) => {
         try {
             // Save the message to the database
-            const chatMessage = new Chat({
+            const message = new Chat({
+                userId: data.userId,
+                receiverId: data.userId, // The ID of the other user in the conversation
                 message: data.message,
-                userId: data.senderId,
+                time: new Date().toLocaleTimeString(),
             });
-            const savedMessage = await chatMessage.save();
+            const savedMessage = await message.save();
 
             // Emit the message to the recipient's socket
-            socket.broadcast.to(data.userId).emit('receive-message', { message: data.message, senderId: data.senderId });
-            console.log("recive-mesage", data.message)
+            socket.to(data.receiverId).emit('test-event', {
+                receiverId: data.userId,
+                message: data.message,
+                time: new Date().toLocaleTimeString(),
+            });
+
             console.log('Message saved and emitted:', savedMessage);
+            console.log('Reciver Mesage:', message);
+
         } catch (err) {
             console.log(err);
         }
     });
 
-    socket.on('disconnect', () => {
-        console.log('userDisconnect', socket.id);
-    });
-});
+})
+
+// // API endpoint to fetch conversation history for a specific user
+// app.get('/api/conversation-history/:userId', async (req, res) => {
+//     try {
+//         const userId = req.params.userId;
+//         const conversation = await Chat.find({
+//             $or: [{ userId: userId }, { receiverId: userId }],
+//         });
+//         res.json(conversation);
+//         console.log(conversation)
+//     } catch (error) {
+//         console.log("Error fetching conversation history:", error);
+//         res.status(500).json({ error: "Failed to fetch conversation history" });
+//     }
+// });
+
 
 
 

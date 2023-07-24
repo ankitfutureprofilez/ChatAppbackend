@@ -21,6 +21,7 @@ const io = new Server(server, {
         methods: ['GET', 'POST'],
     },
 });
+
 io.on('connection', (socket) => {
     console.log(`user connected ${socket.id}`);
 
@@ -28,48 +29,35 @@ io.on('connection', (socket) => {
         socket.join(data);
         console.log(`userId is: ${socket.id} join-room ${data}`);
     });
+
     socket.on('send-message', async (data) => {
         try {
             // Save the message to the database
             const message = new Chat({
-                userId: data.userId,
-                receiverId: data.userId, // The ID of the other user in the conversation
+                userId: data.sender,
+                receiveId: data.receiveId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
             });
             const savedMessage = await message.save();
 
-            // Emit the message to the recipient's socket
-            socket.to(data.receiverId).emit('test-event', {
-                receiverId: data.userId,
+            // Emit the message to the recipient's socket room
+            io.to(data.sender).emit('test-event', {
+                receiveId: data.sender,
+                userId: data.receiveId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
             });
 
             console.log('Message saved and emitted:', savedMessage);
-            console.log('Reciver Mesage:', message);
+            console.log('Receiver Message:', message);
 
         } catch (err) {
             console.log(err);
         }
     });
 
-})
-
-// // API endpoint to fetch conversation history for a specific user
-// app.get('/api/conversation-history/:userId', async (req, res) => {
-//     try {
-//         const userId = req.params.userId;
-//         const conversation = await Chat.find({
-//             $or: [{ userId: userId }, { receiverId: userId }],
-//         });
-//         res.json(conversation);
-//         console.log(conversation)
-//     } catch (error) {
-//         console.log("Error fetching conversation history:", error);
-//         res.status(500).json({ error: "Failed to fetch conversation history" });
-//     }
-// });
+});
 
 
 

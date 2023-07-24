@@ -6,16 +6,28 @@ const Chats = require('../controller/chatController')
 
 const verifyUserToken = require('../middleware/Auth')
 
+const Chat = require('../models/Messages'); // Assuming the correct path to your Messages model
+
+
 routes.post('/signup', signups.Singup)
 
 routes.post('/login', signups.Login)
 
-routes.get('/chats',verifyUserToken,signups.userlist)
+routes.get('/user', verifyUserToken, signups.user)
+
+routes.get('/chatmassges',verifyUserToken,signups.userlist)
 
 routes.post('/chat', verifyUserToken, Chats.sendMessage)
 
-routes.get('/chat/:userId', verifyUserToken, Chats.chatshow)
-routes.get('/user', verifyUserToken, signups.user)
+routes.get('/chat/:receiveId', verifyUserToken, Chats.chatsMessageList)
+
+
+
+
+  
+
+//routes.get('/messages/:senderId/:receiverId',verifyUserToken,Chats.hatmessage)c
+
 
 
 

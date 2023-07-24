@@ -12,7 +12,20 @@ const mongoose = require("mongoose")
 app.use(express.json())
 const apirouter = require('./routes/Index')
 app.use("/api", apirouter)
-mongoose.connect(`${process.env.DB_URL}`)
+const password = process.env.password;
+
+mongoose
+  .connect(`mongodb+srv://ankitjain:${password}@cluster0.syimr7w.mongodb.net/`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Mongodb is Connected");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error.message);
+  });
+
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 
 const io = new Server(server, {
@@ -24,16 +37,15 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
     console.log(`user connected ${socket.id}`);
-
     socket.on('join-room', (data) => {
         socket.join(data);
         console.log(`userId is: ${socket.id} join-room ${data}`);
     });
-
     socket.on('send-message', async (data) => {
         try {
             // Save the message to the database
             const message = new Chat({
+           
                 userId: data.sender,
                 receiveId: data.receiveId,
                 message: data.message,
@@ -43,6 +55,7 @@ io.on('connection', (socket) => {
 
             // Emit the message to the recipient's socket room
             io.to(data.sender).emit('test-event', {
+             
                 receiveId: data.sender,
                 userId: data.receiveId,
                 message: data.message,
@@ -56,11 +69,7 @@ io.on('connection', (socket) => {
             console.log(err);
         }
     });
-
 });
-
-
-
 
 
 // Start the server
@@ -69,3 +78,5 @@ server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
+//ankitjain
+//IJBbNvOBcHJxxseC

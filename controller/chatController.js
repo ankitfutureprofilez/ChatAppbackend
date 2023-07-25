@@ -22,7 +22,7 @@ exports.sendMessage = async (req, res) => {
 
     res.json({
       receiveId: userId,
-      status: 200,
+      status: true,
       success: true,
       message: savedMessage,
     });
@@ -47,13 +47,13 @@ exports.chatsMessageList = (async (req, res) => {
     res.json({
       chats: records,
       msg: "Succes",
-      status: 200
+      status: true
     })
   } catch (error) {
     console.log(error)
     res.json({
       error: error,
-      status: 400,
+      status: false,
       msg: "Decline Chat"
     })
   }

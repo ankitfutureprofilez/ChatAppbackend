@@ -32,7 +32,7 @@ exports.Singup = (async (req, res) => {
 
         //      console.log("result", results);
         if (results) {
-            return res.status(200).json({
+            return res.json({
                 msg: "Successfully created !!",
                 user: results,
                 status: true
@@ -77,9 +77,10 @@ exports.Login = (async (req, res) => {
 
     } catch (error) {
         //console.log(error)
-        res.status(200).json({
-            msg: error,
-            status: "falied"
+        res.json({
+            error:error,
+            msg: "Not Login",
+            status: false
         });
     }
 })

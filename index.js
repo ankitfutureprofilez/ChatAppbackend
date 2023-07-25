@@ -71,7 +71,13 @@ io.on('connection', (socket) => {
     });
 });
 
+app.get('/',(req,res)=>{
 
+    res.json({
+        msg:"Hiii Conceted",
+        status:true
+    })
+})
 // Start the server
 const PORT = process.env.PORT; // Change this to the desired port
 server.listen(PORT, () => {

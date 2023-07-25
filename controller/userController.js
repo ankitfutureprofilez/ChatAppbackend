@@ -78,7 +78,7 @@ exports.Login = (async (req, res) => {
     } catch (error) {
         //console.log(error)
         res.json({
-            error:error,
+            error: error,
             msg: "Not Login",
             status: false
         });
@@ -126,8 +126,8 @@ exports.user = (async (req, res) => {
 
 
 exports.test = (async (req, res) => {
-        res.status(200).json({
-            message: "test /api",
-            status: true
-        })
+    res.status(200).json({
+        message: "test /api",
+        status: true
+    })
 });

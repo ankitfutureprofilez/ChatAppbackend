@@ -9,7 +9,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/",  "maxDuration": 10000
+            "dest": "/",  "maxDuration": 100000
         }
     ]
 

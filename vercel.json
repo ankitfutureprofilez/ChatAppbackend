@@ -2,15 +2,14 @@
     "builds": [
         {
             "src": "./index.js",
-            "use": "@vercel/node",
-            "maxDuration": 100000
+            "use": "@vercel/node"
           
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/",  "maxDuration": 100000
+            "dest": "/"  
         }
     ]
 

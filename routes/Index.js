@@ -22,6 +22,7 @@ routes.post('/chat', verifyUserToken, Chats.sendMessage)
 routes.get('/chat/:receiveId', verifyUserToken, Chats.chatsMessageList)
 
 
+routes.get('', signups.test)
 
 
   

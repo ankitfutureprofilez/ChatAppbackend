@@ -123,3 +123,11 @@ exports.user = (async (req, res) => {
         })
     }
 });
+
+
+exports.test = (async (req, res) => {
+        res.status(200).json({
+            message: "test /api",
+            status: true
+        })
+});

@@ -62,8 +62,8 @@ io.on('connection', (socket) => {
                 time: new Date().toLocaleTimeString(),
             });
 
-            console.log('Message saved and emitted:', savedMessage);
-            console.log('Receiver Message:', message);
+          //  console.log('Message saved and emitted:', savedMessage);
+         //   console.log('Receiver Message:', message);
 
         } catch (err) {
             console.log(err);

@@ -8,9 +8,9 @@ exports.Singup = (async (req, res) => {
         const { name, email, password, username, confirmpasword } = req.body
         const lastuserid = await Users.findOne({}, "userId").sort({ userId: -1 });
         const newUserId = lastuserid ? lastuserid.userId + 1 : 1;
-        console.log(newUserId)
+      //  console.log(newUserId)
         let isAlready = await Users.findOne({ username: username });
-        console.log(isAlready)
+      //  console.log(isAlready)
         if (isAlready) {
             return res.status(400).json({
                 msg: "That user already exisits!",
@@ -56,7 +56,7 @@ exports.Login = (async (req, res) => {
         const { username, password } = req.body
         const user = await Users.findOne({ username: username });
         const isPassword = await Users.findOne({ password: password });
-        console.log(user, isPassword)
+    //    console.log(user, isPassword)
         if (!user || !isPassword) {
             res.json({
                 status: false,
@@ -88,9 +88,9 @@ exports.Login = (async (req, res) => {
 exports.userlist = (async (req, res) => {
     try {
         const usernameToExclude = req.body.username// Replace 'exampleUsername' with the username you want to exclude
-        console.log(usernameToExclude)
+      //  console.log(usernameToExclude)
         const record = await Users.find({ username: { $ne: usernameToExclude } });
-        console.log(record)
+    //    console.log(record)
         res.json({
             data: record,
             msg: "success",
@@ -108,7 +108,7 @@ exports.userlist = (async (req, res) => {
 
 exports.user = (async (req, res) => {
     try {
-        console.log("req data", req.user);
+      //  console.log("req data", req.user);
         res.status(200).json({
             user: req.user,
             status: true

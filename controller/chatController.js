@@ -1,5 +1,4 @@
 const Chat = require('../models/Messages')
-const Usermodel = require('../models/Users')
 
 
 exports.sendMessage = async (req, res) => {
@@ -7,8 +6,8 @@ exports.sendMessage = async (req, res) => {
     const userId = req.body.receiverId;
     const senderId = req.user.userId; // Assuming the authenticated user's ID is available in req.user.userId
 
-    console.log('receiverId', userId);
-    console.log('senderId', senderId);
+   // console.log('receiverId', userId);
+   // console.log('senderId', senderId);
 
     const chatMessage = new Chat({
       message: req.body.message,
@@ -41,10 +40,10 @@ exports.sendMessage = async (req, res) => {
 
 exports.chatsMessageList = (async (req, res) => {
   const { receiveId } = req.params;
-  console.log("receiveId", receiveId)
+ // console.log("receiveId", receiveId)
   try {
     const records = await Chat.find({ receiveId: receiveId });
-    console.log("records", records)
+   // console.log("records", records)
     res.json({
       chats: records,
       msg: "Succes",

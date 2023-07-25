@@ -11,7 +11,7 @@ const { Server } = require('socket.io');
 const mongoose = require("mongoose")
 app.use(express.json())
 const apirouter = require('./routes/Index')
-app.use(apirouter)
+app.use("/api",apirouter)
 const password = process.env.password;
 
 mongoose

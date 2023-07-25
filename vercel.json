@@ -11,12 +11,11 @@
             "dest": "/"
         }
     ],
-        "functions": {
-          "api/signup": {
+    "functions": {
+        "api/signup": {
             "runtime": "nodejs14.x",
             "memory": 512,
             "timeout": 30
-          }
         }
-      
+    }
 }

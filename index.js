@@ -13,7 +13,7 @@ app.use(express.json())
 // const apirouter = require('./routes/Index')
 // app.use("/api",apirouter)
 const userController=require("./controller/userController")
-app.post('/api/singup',userController.Singup)
+app.post('/api/signup',userController.Singup)
 const password = process.env.password;
 
 

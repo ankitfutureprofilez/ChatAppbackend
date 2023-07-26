@@ -10,9 +10,13 @@ require('dotenv').config()
 const { Server } = require('socket.io');
 const mongoose = require("mongoose")
 app.use(express.json())
-const apirouter = require('./routes/Index')
-app.use("/api",apirouter)
+// const apirouter = require('./routes/Index')
+// app.use("/api",apirouter)
+const userController=require("./controller/userController")
+app.post('/api/singup',userController.Singup)
 const password = process.env.password;
+
+
 
 mongoose
   .connect(`mongodb+srv://ankitjain:${password}@cluster0.syimr7w.mongodb.net/`, {

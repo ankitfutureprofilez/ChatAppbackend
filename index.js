@@ -27,17 +27,7 @@ const password = process.env.password;
 
 
 
-// mongoose
-//   .connect(``, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .then(() => {
-//     console.log("Mongodb is Connected");
-//   })
-//   .catch((error) => {
-//     console.error("Error connecting to MongoDB:", error.message);
-//   });
+
 
 
   mongoose.connect( `mongodb+srv://ankitjain:${password}@cluster0.syimr7w.mongodb.net/test`, {

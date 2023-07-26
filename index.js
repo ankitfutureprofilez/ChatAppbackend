@@ -12,8 +12,11 @@ const mongoose = require("mongoose")
 app.use(express.json())
 // const apirouter = require('./routes/Index')
 // app.use("/api",apirouter)
+
 const userController=require("./controller/userController")
-app.post('/api/signup',userController.Singup)
+
+app.post('/signup',userController.Singup)
+
 const password = process.env.password;
 
 

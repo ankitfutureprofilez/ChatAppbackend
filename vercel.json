@@ -1,15 +1,16 @@
 {
-    "version": 1,
+    "version":"2",
+    "buildCommand":"next build",
     "builds": [
-      {
-        "src": "./index.js",
-        "use": "@vercel/node"
-      }
+        {
+            "src": "./index.js",
+            "use": "@vercel/node"
+        }
     ],
     "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/api/signup"
-      }
+        {
+            "src": "/.*",
+            "dest": "index.js"  
+        }
     ]
-  }
+}

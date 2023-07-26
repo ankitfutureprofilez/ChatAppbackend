@@ -6,6 +6,6 @@
        { "src": "./Index.js", "use": "@vercel/node" }
     ],
     "routes": [
-       { "src": "/", "dest": "/api/Index.js","methods":["POST","GET"] }
+       { "src": "/", "dest": "Index.js","methods":["POST","GET"] }
     ]
  }

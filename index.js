@@ -9,7 +9,9 @@ const server = http.createServer(app);
 require('dotenv').config()
 const { Server } = require('socket.io');
 const mongoose = require("mongoose")
-app.use(express.json())
+const  bodyParser = require('body-parser')
+
+app.use(bodyParser.json())
 const apirouter = require('./routes/Index')
 app.use("/api",apirouter)
 

@@ -28,13 +28,13 @@ exports.Singup = (async (req, res) => {
             password: password,
             confirmpasword: confirmpasword
         });
-        const results = await user.save();
+       // const results = await user.save();
 
         //      console.log("result", results);
-        if (results) {
+        if (user) {
             return res.json({
                 msg: "Successfully created !!",
-                user: results,
+                user: user,
                 status: true
             });
         }

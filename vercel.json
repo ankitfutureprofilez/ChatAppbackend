@@ -1,12 +1,12 @@
 {
     "version":2,
-    "name": "node media server",
+    "name": "node chat",
     "buildCommand": "next build",
     "builds": [
        { "src": "./index.js", "use": "@vercel/node" , "maxDuration": 300}
     ],
     "routes": [
-       { "src": "/.*", "dest": "index.js" }
+       { "src": "/.*", "dest": "./index.js" }
     ]
  }
  

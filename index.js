@@ -15,7 +15,11 @@ app.use("/api",apirouter)
 
 const userController=require("./controller/userController")
 
-app.post('/signup',userController.Singup)
+app.post('/add',(req, res)=>{
+    res.status(200).json({
+        status:true
+    })
+})
 
 const password = process.env.password;
 

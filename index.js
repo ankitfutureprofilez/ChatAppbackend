@@ -1,48 +1,50 @@
 // app.js
 //import express from "express"
 const express = require('express');
+
 const http = require('http');
+
+
 const app = express();
+
 const cors = require("cors")
+
 app.use(cors())
+
 const server = http.createServer(app);
+
 require('dotenv').config()
+
 const { Server } = require('socket.io');
+
 const mongoose = require("mongoose")
-const  bodyParser = require('body-parser')
+
+const bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
+
 const apirouter = require('./routes/Index')
-app.use("/api",apirouter)
 
-const userController=require("./controller/userController")
+app.use("/api", apirouter)
 
-app.post('/add',(req, res)=>{
-    res.status(200).json({
-        status:true
-    })
-})
+
+
 
 const password = process.env.password;
 
-
-
-
-
-
-  mongoose.connect( `mongodb+srv://ankitjain:${password}@cluster0.syimr7w.mongodb.net/test`, {
-    useNewUrlParser: true,   
-    serverSelectionTimeoutMS: 5000,    
+mongoose.connect(`mongodb+srv://ankitjain:${password}@cluster0.syimr7w.mongodb.net/test`, {
+    useNewUrlParser: true,
+    serverSelectionTimeoutMS: 5000,
     autoIndex: false, // Don't build indexes 
     maxPoolSize: 10, // Maintain up to 10 socket connections
     serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
     socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
     family: 4 // Use IPv4, skip trying IPv6 
- }).then(() => {
-   console.log('MongoDB connected successfully');
- }).catch((err) => {
-   console.error('MongoDB connection error: ', err);
- });
+}).then(() => {
+    console.log('MongoDB connected successfully');
+}).catch((err) => {
+    console.error('MongoDB connection error: ', err);
+});
 
 
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
@@ -64,7 +66,7 @@ io.on('connection', (socket) => {
         try {
             // Save the message to the database
             const message = new Chat({
-           
+
                 userId: data.sender,
                 receiveId: data.receiveId,
                 message: data.message,
@@ -74,15 +76,15 @@ io.on('connection', (socket) => {
 
             // Emit the message to the recipient's socket room
             io.to(data.sender).emit('test-event', {
-             
+
                 receiveId: data.sender,
                 userId: data.receiveId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
             });
 
-          //  console.log('Message saved and emitted:', savedMessage);
-         //   console.log('Receiver Message:', message);
+            //  console.log('Message saved and emitted:', savedMessage);
+            //   console.log('Receiver Message:', message);
 
         } catch (err) {
             console.log(err);
@@ -90,13 +92,7 @@ io.on('connection', (socket) => {
     });
 });
 
-app.get('/',(req,res)=>{
 
-    res.json({
-        msg:"Hiii Conceted",
-        status:true
-    })
-})
 // Start the server
 const PORT = process.env.PORT; // Change this to the desired port
 server.listen(PORT, () => {

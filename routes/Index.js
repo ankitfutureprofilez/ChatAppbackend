@@ -1,25 +1,25 @@
 const routes = require("express").Router()
 
-const signups = require('../controller/userController')
+const userController = require('../controller/userController')
 
-const Chats = require('../controller/chatController')
+const chatController = require('../controller/chatController')
 
 const verifyUserToken = require('../middleware/Auth')
 
 const Chat = require('../models/Messages'); // Assuming the correct path to your Messages model
 
 
-routes.post('/signup', signups.Singup)
+routes.post('/signup', userController.user)
 
-routes.post('/login', signups.Login)
+routes.post('/login', userController.Login)
 
-routes.get('/user', verifyUserToken, signups.user)
+routes.get('/user', verifyUserToken, userController.user)
 
-routes.get('/chatmassges',verifyUserToken,signups.userlist)
+routes.get('/chatmassges',verifyUserToken,userController.userlist)
 
-routes.post('/chat', verifyUserToken, Chats.sendMessage)
+routes.post('/chat', verifyUserToken, chatController.sendMessage)
 
-routes.get('/chat/:receiveId', verifyUserToken, Chats.chatsMessageList)
+routes.get('/chat/:receiveId', verifyUserToken, chatController.chatsMessageList)
 
 
 

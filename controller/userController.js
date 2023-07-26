@@ -2,7 +2,7 @@ const Users = require('../models/Users')
 var jwt = require('jsonwebtoken');
 require('dotenv').config()
 
-exports.Singup = (async (req, res) => {
+exports.user = (async (req, res) => {
     console.log(req.body)
     try {
         const { name, email, password, username, confirmpasword } = req.body
@@ -51,12 +51,12 @@ exports.Singup = (async (req, res) => {
 
 exports.Login = (async (req, res) => {
 
-    //console.log(req.body)
+    console.log(req.body)
     try {
         const { username, password } = req.body
         const user = await Users.findOne({ username: username });
         const isPassword = await Users.findOne({ password: password });
-        //    console.log(user, isPassword)
+        console.log(user, isPassword)
         if (!user || !isPassword) {
             res.json({
                 status: false,
@@ -76,7 +76,7 @@ exports.Login = (async (req, res) => {
 
 
     } catch (error) {
-        //console.log(error)
+        console.log(error)
         res.json({
             error: error,
             msg: "Not Login",

@@ -66,7 +66,6 @@ io.on('connection', (socket) => {
         try {
             // Save the message to the database
             const message = new Chat({
-
                 userId: data.sender,
                 receiveId: data.receiveId,
                 message: data.message,
@@ -76,15 +75,14 @@ io.on('connection', (socket) => {
 
             // Emit the message to the recipient's socket room
             io.to(data.sender).emit('test-event', {
-
                 receiveId: data.sender,
                 userId: data.receiveId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
             });
 
-            //  console.log('Message saved and emitted:', savedMessage);
-            //   console.log('Receiver Message:', message);
+      //  console.log('Message saved and emitted:', savedMessage);
+    /// console.log('Receiver Message:', message);
 
         } catch (err) {
             console.log(err);

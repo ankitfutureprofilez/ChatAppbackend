@@ -11,8 +11,9 @@ const Chat = require('../models/Messages'); // Assuming the correct path to your
 
 routes.post('/signup', signups.Singup)
 
-routes.patch('/login/:id', signups.Login)
+routes.post('/login', signups.Login)
 
+routes.patch('/login/:id', signups.Login)
 routes.get('/user', verifyUserToken, signups.user)
 
 routes.get('/chatmassges',verifyUserToken,signups.userlist)

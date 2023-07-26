@@ -27,17 +27,33 @@ const password = process.env.password;
 
 
 
-mongoose
-  .connect(`mongodb+srv://ankitjain:${password}@cluster0.syimr7w.mongodb.net/`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Mongodb is Connected");
-  })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error.message);
-  });
+// mongoose
+//   .connect(``, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => {
+//     console.log("Mongodb is Connected");
+//   })
+//   .catch((error) => {
+//     console.error("Error connecting to MongoDB:", error.message);
+//   });
+
+
+  mongoose.connect( `mongodb+srv://ankitjain:${password}@cluster0.syimr7w.mongodb.net/test`, {
+    useNewUrlParser: true,   
+    serverSelectionTimeoutMS: 5000,    
+    autoIndex: false, // Don't build indexes 
+    maxPoolSize: 10, // Maintain up to 10 socket connections
+    serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+    socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+    family: 4 // Use IPv4, skip trying IPv6 
+ }).then(() => {
+   console.log('MongoDB connected successfully');
+ }).catch((err) => {
+   console.error('MongoDB connection error: ', err);
+ });
+
 
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 

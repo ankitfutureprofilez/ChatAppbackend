@@ -3,12 +3,12 @@ var jwt = require('jsonwebtoken');
 require('dotenv').config()
 
 exports.Singup = (async (req, res) => {
-    ///  console.log(req.body)
+    console.log(req.body)
     try {
         const { name, email, password, username, confirmpasword } = req.body
         const lastuserid = await Users.findOne({}, "userId").sort({ userId: -1 });
         const newUserId = lastuserid ? lastuserid.userId + 1 : 1;
-        //  console.log(newUserId)
+        console.log("newuserID", newUserId)
         let isAlready = await Users.findOne({ username: username });
         //  console.log(isAlready)
         if (isAlready) {
@@ -17,7 +17,7 @@ exports.Singup = (async (req, res) => {
                 status: false
             });
         }
-        //    console.log("last", lastuserid)
+        console.log("last", lastuserid)
 
         //        Insert the new user if they do not exist yet
         let user = new Users({
@@ -28,13 +28,13 @@ exports.Singup = (async (req, res) => {
             password: password,
             confirmpasword: confirmpasword
         });
-       // const results = await user.save();
+        const results = await user.save();
 
-        //      console.log("result", results);
-        if (user) {
+        console.log("result", results);
+        if (results) {
             return res.json({
                 msg: "Successfully created !!",
-                user: user,
+                user: results,
                 status: true
             });
         }

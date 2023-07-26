@@ -3,9 +3,9 @@
     "name": "node chatapp",
     "buildCommand": "next build",
     "builds": [
-       { "src": "./index.js", "use": "@vercel/node" }
+       { "src": "./index.js", "use": "@vercel/node"}
     ],
     "routes": [
-       { "src": "/", "dest": "index.js" }
+       { "src": "/.*", "dest": "index.js" }
     ]
  }

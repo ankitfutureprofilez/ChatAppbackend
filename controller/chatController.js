@@ -28,17 +28,17 @@ exports.conversion = (async (req, res) => {
     console.log("newconversation", newconversation)
     res.json({
       status: 200,
-      data: newconversation,
-      msg: "Successfully Created"
+      data:newconversation,
+      msg:"Successfully Created"
 
     })
 
   } catch (err) {
     console.log(err)
     res.json({
-      err: err,
-      msg: "Error Detec",
-      status: 400
+      err:err,
+      msg:"Error Detec",
+      status:400
     })
   }
 
@@ -52,11 +52,15 @@ exports.conversion = (async (req, res) => {
 exports.sendMessage = async (req, res) => {
   try {
 
+
+
+
+
+
+    
     const userId = req.body.receiverId;
     const senderId = req.user.userId; // Assuming the authenticated user's ID is available in req.user.userId
     const username = req.user.username;
-
-
     // console.log('receiverId', userId);
     //   console.log('username', username);
 
@@ -64,7 +68,7 @@ exports.sendMessage = async (req, res) => {
       message: req.body.message,
       userId: senderId,
       receiveId: receiveId,
-      username: username
+
     });
 
     const savedMessage = await chatMessage.save();

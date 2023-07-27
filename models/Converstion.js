@@ -2,15 +2,15 @@ const mongoose = require("mongoose")
 
 
 const ConverSchema = mongoose.Schema({
-    "userA": String,
-    "userB": String,
+    "userA": Number,
+    "userB": Number,
     "uid": String,
-    "updateAt": {type:Date, default: Date.now()}
+    "updateAt": { type: Date, default: Date.now() }
 
 })
-const Conversion= mongoose.model("Convers",ConverSchema)
+const Conversion = mongoose.model("Convers", ConverSchema)
 
 
 
-module.exports=Conversion
+module.exports = Conversion
 

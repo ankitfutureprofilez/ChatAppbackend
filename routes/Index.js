@@ -22,6 +22,8 @@ routes.post('/chat', verifyUserToken, chatController.sendMessage)
 routes.get('/chat/:receiveId', verifyUserToken, chatController.chatsMessageList)
 
 
+routes.post('/conversion',verifyUserToken,chatController.conversion)
+
 
   
 

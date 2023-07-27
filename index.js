@@ -32,7 +32,7 @@ app.use("/api", apirouter)
 
 const password = process.env.password;
 
-mongoose.connect(`mongodb+srv://ankitjain:${password}@cluster0.syimr7w.mongodb.net/test`, {
+mongoose.connect(`${process.env.DB_URL}`, {
     useNewUrlParser: true,
     serverSelectionTimeoutMS: 5000,
     autoIndex: false, // Don't build indexes 
@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
         try {
             // Save the message to the database
             const message = new Chat({
-                userId: data.sender,
+                userId: data.userId,
                 receiveId: data.receiveId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
@@ -74,15 +74,15 @@ io.on('connection', (socket) => {
             const savedMessage = await message.save();
 
             // Emit the message to the recipient's socket room
-            io.to(data.sender).emit('test-event', {
-                receiveId: data.sender,
-                userId: data.receiveId,
+            io.to(data.userId).emit('test-event', {
+                receiveId: data.receiveId,
+                userId: data.userId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
             });
 
-      //  console.log('Message saved and emitted:', savedMessage);
-    /// console.log('Receiver Message:', message);
+            console.log('Message saved and emitted:', savedMessage);
+            console.log('Receiver Message:', message);
 
         } catch (err) {
             console.log(err);

@@ -5,7 +5,7 @@ require('dotenv').config()
 exports.user = (async (req, res) => {
     console.log(req.body)
     try {
-        const { name, email, password, username, confirmpasword } = req.body
+        const { name, email, password, username, confirmPassword } = req.body
         const lastuserid = await Users.findOne({}, "userId").sort({ userId: -1 });
         const newUserId = lastuserid ? lastuserid.userId + 1 : 1;
         console.log("newuserID", newUserId)
@@ -26,7 +26,7 @@ exports.user = (async (req, res) => {
             name: name,
             email: email,
             password: password,
-            confirmpasword: confirmpasword
+            confirmPassword: confirmPassword
         });
         const results = await user.save();
 

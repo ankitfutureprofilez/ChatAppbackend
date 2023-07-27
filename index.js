@@ -32,7 +32,7 @@ app.use("/api", apirouter)
 
 const password = process.env.password;
 
-mongoose.connect(`${process.env.DB_URL}`, {
+mongoose.connect(`mongodb+srv://ankitjain:${password}@cluster0.syimr7w.mongodb.net/test`, {
     useNewUrlParser: true,
     serverSelectionTimeoutMS: 5000,
     autoIndex: false, // Don't build indexes 

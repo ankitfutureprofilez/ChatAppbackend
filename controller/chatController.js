@@ -95,7 +95,7 @@ exports.sendMessage = async (req, res) => {
       prompt: question,
     });
     const answer = answerCompletion.data.choices[0].text;
-
+    console.log("answer", answer)
     // Save the question and answer to the database
     const chatMessage = new Chat({
       message: question,

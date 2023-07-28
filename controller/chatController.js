@@ -7,13 +7,13 @@ const io = require('socket.io')(); // Don't need this since io is initialized in
 const { Configuration, OpenAIApi } = require("openai");
 
 const ApiKey = process.env.OPENAI_API_KEY;
-console.log("ApiKey",ApiKey)
+console.log("ApiKey", ApiKey)
 const configuration = new Configuration({
   apiKey: ApiKey,
 });
-console.log("configuration",configuration)
+console.log("configuration", configuration)
 const openai = new OpenAIApi(configuration);
-console.log("openai",openai)
+console.log("openai", openai)
 
 
 exports.findAnswer = async (req, res) => {
@@ -60,7 +60,7 @@ exports.conversion = (async (req, res) => {
         receiverId: receiverId,
         uid: newuid,
       });
-      
+
     }
     const newconversation = await conver.save();
     console.log("newconversation", newconversation)
@@ -157,12 +157,12 @@ exports.sendMessage = async (req, res) => {
 
 
 exports.chatsMessageList = (async (req, res) => {
+  console.log(req.params)
   const { receiveId } = req.params;
-  //console.log("receiveId", receiveId)
-
+  console.log("receiveId", receiveId,)
   try {
     const records = await Chat.find({ receiveId: receiveId });
-    ///  console.log("records", records)
+    console.log("records", records)
     res.json({
       chats: records,
       msg: "Succes",

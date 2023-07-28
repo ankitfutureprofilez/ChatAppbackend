@@ -87,69 +87,53 @@ exports.sendMessage = async (req, res) => {
   try {
     const receiverId = req.body.receiverId;
     const senderId = req.user.userId; // Assuming the authenticated user's ID is available in req.user.userId
-    // const username = req.user.username;
-    console.log("senderId", senderId)
-    console.log("receiverId", receiverId)
-    // console.log('username', username);
-    // Console.log(username);
 
-
-    const chatMessage = new Chat({
-      message: req.body.message,
-      userId: senderId,
-      receiveId: receiverId
+    // Process the question and get the answer
+    const question = "What is the capital of India?";
+    const answerCompletion = await openai.createCompletion({
+      model: "text-davinci-001",
+      prompt: question,
     });
+    const answer = answerCompletion.data.choices[0].text;
 
-
-    // New Coversation ID or updated status
-
-    // check ui exixts or not
-    const lastuid = await Conversation.findOne({}, "uid").sort({ uid: -1 });
-    const newuid = lastuid ? +lastuid.uid + 1 : 1;
-
-    if (lastuid) {
-      console.log("given the converstion id ")
-    } else {
-      const conver = new Conversation({
-        userId: senderId,
-        receiverId: receiverId,
-        uid: newuid,
-      });
-      const newconversation = await conver.save();
-      console.log("newconversation", newconversation)
-
-    }
-
-    // const conver = new Conversation({
-    //   userId: senderId,
-    //   receiverId: receiverId,
-    //   uid: newuid,
-    // });
-    // const newconversation = await conver.save();
-    // console.log("newconversation", newconversation)
-
-
-
+    // Save the question and answer to the database
+    const chatMessage = new Chat({
+      message: question,
+      userId: senderId,
+      receiveId: receiverId,
+      answer: answer,
+    });
     const savedMessage = await chatMessage.save();
 
+    // Create or update the conversation ID
+    const lastUid = await Conversation.findOne({}, "uid").sort({ uid: -1 });
+    const newUid = lastUid ? +lastUid.uid + 1 : 1;
 
-    console.log("savedMessage", savedMessage);
+    if (lastUid) {
+      console.log("Given the conversation ID");
+    } else {
+      const conversation = new Conversation({
+        userId: senderId,
+        receiverId: receiverId,
+        uid: newUid,
+      });
+      const newConversation = await conversation.save();
+      console.log("newConversation", newConversation);
+    }
 
     // Emit the message to the recipient's socket
-    io.to(receiverId).emit('test-event', { message: req.body.message, senderId });
-    // io.to(receiveId).emit('conversations', { message: req.body.message, senderId });
+    io.to(receiverId).emit('test-event', { message: question, senderId });
+
     res.json({
       receiveId: receiverId,
       status: true,
       success: true,
       message: savedMessage,
+      answer: answer,
     });
-  } catch (err) {
-    console.log(err);
-    res.json({
-      success: false,
-      message: err,
-    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "An error occurred while processing your request." });
   }
 };
 

@@ -2,22 +2,22 @@ const Users = require('../models/Users')
 var jwt = require('jsonwebtoken');
 require('dotenv').config()
 
-exports.user = (async (req, res) => {
-    console.log(req.body)
+exports.singup = (async (req, res) => {
+    //  console.log(req.body)
     try {
         const { name, email, password, username, confirmPassword } = req.body
         const lastuserid = await Users.findOne({}, "userId").sort({ userId: -1 });
         const newUserId = lastuserid ? lastuserid.userId + 1 : 1;
-        console.log("newuserID", newUserId)
+        // console.log("newuserID", newUserId)
         let isAlready = await Users.findOne({ username: username });
-        //  console.log(isAlready)
+        //console.log(isAlready)
         if (isAlready) {
             return res.status(400).json({
                 msg: "That user already exisits!",
-                status: false
+                status: true
             });
         }
-        console.log("last", lastuserid)
+        //console.log("last", lastuserid)
 
         //        Insert the new user if they do not exist yet
         let user = new Users({
@@ -30,12 +30,12 @@ exports.user = (async (req, res) => {
         });
         const results = await user.save();
 
-        console.log("result", results);
+        //  console.log("result", results);
         if (results) {
             return res.json({
                 msg: "Successfully created !!",
                 user: results,
-                status: true
+                status: 200
             });
         }
     } catch (error) {
@@ -51,7 +51,7 @@ exports.user = (async (req, res) => {
 
 exports.Login = (async (req, res) => {
 
-    console.log(req.body)
+    //console.log(req.body)
     try {
         const { username, password } = req.body
         const user = await Users.findOne({ username: username });
@@ -66,7 +66,7 @@ exports.Login = (async (req, res) => {
         const token = jwt.sign({ user }, process.env.JWT_SECRET, {
             expiresIn: "5h",
         });
-        console.log(token)
+        //     console.log(token)
         res.json({
             status: true,
             user: user,
@@ -98,7 +98,7 @@ exports.userlist = (async (req, res) => {
             status: 200
         });
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.json({
             error: error,
             status: 400,
@@ -115,7 +115,7 @@ exports.user = (async (req, res) => {
             status: true
         })
     } catch (error) {
-        console.log(error)
+        //   console.log(error)
         res.status(400).json({
             error: error,
             status: false,

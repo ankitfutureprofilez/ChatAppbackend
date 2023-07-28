@@ -11,18 +11,20 @@ const cors = require("cors")
 
 var allowedOrigins = ['http://localhost:3000', 'http://localhost'];
 app.use(cors({
-  origin: function(origin, callback){
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
-      var msg = 'The CORS policy for this site does not ' +
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not ' +
                 'allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
     }
-    return callback(null, true);
-  }
 }));
 
 const server = http.createServer(app);
+
+
 
 require('dotenv').config()
 
@@ -34,16 +36,40 @@ const bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
 
+
+const { Configuration, OpenAIApi } = require("openai");
+
+const ApiKey = process.env.OPENAI_API_KEY
+
+const configuration = new Configuration({
+    apiKey: ApiKey,
+});
+
+const openai = new OpenAIApi(configuration);
+//console.log("openai", openai)
+app.post("/find", async (req, res) => {
+    try {
+        const completion = await openai.createCompletion({
+            model: "text-davinci-001",
+            prompt: "Whats is the capital of india??",
+        });
+        console.log(completion.data.choices[0].text);
+        res.json({
+            response: completion.data.choices[0].text,
+            status: 200
+
+        })
+    } catch (error) {
+        console.log(error)
+    }
+
+})
+
 const apirouter = require('./routes/Index')
 
 app.use("/api", apirouter)
 
-
-
-
-const password = process.env.password;
-
-mongoose.connect(`mongodb+srv://ankitjain:${password}@cluster0.syimr7w.mongodb.net/test`, {
+mongoose.connect(`${process.env.DB_URL}`, {
     useNewUrlParser: true,
     serverSelectionTimeoutMS: 5000,
     autoIndex: false, // Don't build indexes 
@@ -56,6 +82,11 @@ mongoose.connect(`mongodb+srv://ankitjain:${password}@cluster0.syimr7w.mongodb.n
 }).catch((err) => {
     console.error('MongoDB connection error: ', err);
 });
+
+
+
+
+
 
 
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
@@ -87,14 +118,13 @@ io.on('connection', (socket) => {
             // Emit the message to the recipient's socket room
             io.to(data.userId).emit('test-event', {
                 receiveId: data.receiveId,
+                author: data.username,
                 userId: data.userId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
             });
-
             console.log('Message saved and emitted:', savedMessage);
             console.log('Receiver Message:', message);
-
         } catch (err) {
             console.log(err);
         }

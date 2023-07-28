@@ -2,9 +2,9 @@ const mongoose = require("mongoose")
 
 
 const ConverSchema = mongoose.Schema({
-    "userA": Number,
-    "userB": Number,
-    "uid": String,
+    "userId": Number,
+    "receiverId": Number,
+    "uid": Number,
     "updateAt": { type: Date, default: Date.now() }
 
 })

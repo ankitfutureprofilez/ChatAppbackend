@@ -91,7 +91,7 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 
 const io = new Server(server, {
     cors: {
-        origin: 'https://localhost:8080', // Change this to the frontend's URL
+        origin: 'https://localhost:3000', // Change this to the frontend's URL
         methods: ['GET', 'POST'],
     },
 });

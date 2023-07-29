@@ -116,12 +116,8 @@ exports.sendMessage = async (req, res) => {
     const senderId = req.user.userId; // Assuming the authenticated user's ID is available in req.user.userId
 
     // Process the question and get the answer
-    const question = "What is the capital of India?";
-    const answerCompletion = await openai.createCompletion({
-      model: "text-davinci-001",
-      prompt: question,
-    });
-    const answer = answerCompletion.data.choices[0].text;
+   
+ 
     console.log("answer", answer)
     // Save the question and answer to the database
     const chatMessage = new Chat({
@@ -167,12 +163,12 @@ exports.sendMessage = async (req, res) => {
 
 
 exports.chatsMessageList = (async (req, res) => {
-  console.log(req.params)
+  //console.log(req.params)
   const { receiveId } = req.params;
-  console.log("receiveId", receiveId,)
+ // console.log("receiveId", receiveId,)
   try {
     const records = await Chat.find({ receiveId: receiveId });
-    console.log("records", records)
+ //   console.log("records", records)
     res.json({
       chats: records,
       msg: "Succes",

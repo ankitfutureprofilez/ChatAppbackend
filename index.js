@@ -93,44 +93,47 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 
 const io = new Server(server, {
     cors: {
-        origin: 'https://localhost:3000', // Change this to the frontend's URL
+        origin: 'http://localhost:3000', // Change this to the frontend's URL
         methods: ['GET', 'POST'],
     },
 });
 
+// Backend (Node.js) - Socket.IO Event Handling
+
 io.on('connection', (socket) => {
     console.log(`user connected ${socket.id}`);
     socket.on('join-room', (data) => {
-        socket.join(data);
-        console.log(`userId is: ${socket.id} join-room ${data}`);
+      socket.join(data);
+      console.log(`userId is: ${socket.id} join-room ${data}`);
     });
     socket.on('send-message', async (data) => {
-        try {
-            // Save the message to the database
-            const message = new Chat({
-                userId: data.userId,
-                receiveId: data.receiveId,
-                message: data.message,
-                time: new Date().toLocaleTimeString(),
-            });
-            const savedMessage = await message.save();
-
-            // Emit the message to the recipient's socket room
-            io.to(data.receiveId).emit("test-event", {
-                userId: data.userId,
-                author: data.username,
-                receiveId: data.receiveId,
-                message: data.message,
-                time: new Date().toLocaleTimeString(),
-            });
-            
-            console.log('Message saved and emitted:', savedMessage);
-            console.log('Receiver Message:', message);
-        } catch (err) {
-            console.log(err);
-        }
+      try {
+        // Save the message to the database
+        const message = new Chat({
+          userId: data.userId,
+          receiveId: data.receiveId,
+          message: data.message,
+          time: new Date().toLocaleTimeString(),
+        });
+        const savedMessage = await message.save();
+  
+        // Emit the message to the recipient's socket room
+        io.to(data.receiveId).emit("send-message", {
+          userId: data.userId,
+          author: data.username, // Use 'username' instead of 'author'
+          receiveId: data.receiveId,
+          message: data.message,
+          time: new Date().toLocaleTimeString(),
+        });
+  
+        console.log('Message saved and emitted:', savedMessage);
+        console.log('Receiver Message:', message);
+      } catch (err) {
+        console.log(err);
+      }
     });
-});
+  });
+  
 
 
 // Start the server

@@ -141,7 +141,7 @@ exports.sendMessage = async (req, res) => {
     } else {
       const conversation = new Conversation({
         userId: senderId,
-        receiverId: receiverId,
+        receiverId: receiverId, 
         uid: newUid,
       });
       const newConversation = await conversation.save();

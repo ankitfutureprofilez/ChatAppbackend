@@ -72,7 +72,7 @@ mongoose.connect(`${process.env.DB_URL}`, {
     console.error('MongoDB connection error: ', err);
 });
 
-app.get('',()=>{
+app.get('/',(req,res)=>{
     res.json({
         "msg":"Herrr",
         status:true

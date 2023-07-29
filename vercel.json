@@ -2,9 +2,9 @@
    "version": 2,
    "name": "node chat app",
    "builds": [
-      { "src": "/api/index.js", "use": "@vercel/node" }
+      { "src": "index.js", "use": "@vercel/node" }
    ],
    "routes": [
-      { "src": "/(.*)", "dest": "/api/index.js" }
+      { "src": "/(.*)", "dest": "index.js" }
    ]
 }

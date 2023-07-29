@@ -10,9 +10,7 @@ const app = express();
 const cors = require("cors")
 
 app.use(
-    cors({
-        origin: process.env.VERCEL_URL,
-    })
+   cors()
 );
 
 const server = http.createServer(app);

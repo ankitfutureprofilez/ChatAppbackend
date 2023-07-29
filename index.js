@@ -87,7 +87,7 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 
 const io = new Server(server, {
     cors: {
-        origin: 'https://chat-app-plum-chi.vercel.app/', // Change this to the frontend's URL
+        origin: 'https://chat-app-plum-chi.vercel.app', // Change this to the frontend's URL
         methods: ['GET', 'POST'],
     },
 });
@@ -111,9 +111,9 @@ io.on('connection', (socket) => {
 
             // Emit the message to the recipient's socket room
             io.to(data.userId).emit("test-event", {
-                receiveId: data.userId,
+                receiveId: data.receiveId,
                 author: data.username,
-                userId: data.receiveId,
+                userId: data.userId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
               });

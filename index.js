@@ -111,9 +111,9 @@ io.on('connection', (socket) => {
 
             // Emit the message to the recipient's socket room
             io.to(data.userId).emit("test-event", {
-                receiveId: data.userId,
+                userId: data.userId,
                 author: data.username,
-                userId: data.receiveId,
+                receiveId: data.receiveId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
               });

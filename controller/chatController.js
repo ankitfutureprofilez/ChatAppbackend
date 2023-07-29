@@ -2,38 +2,65 @@ const Chat = require('../models/Messages')
 const user = require('../models/Users')
 const Conversation = require("../models/Converstion")
 const io = require('socket.io')(); // Don't need this since io is initialized in the server file
+const QuestionAnswer = require('../models/OpenAi')
+require('dotenv').config()
 
 
 const { Configuration, OpenAIApi } = require("openai");
 
-const ApiKey = process.env.OPENAI_API_KEY;
+const ApiKey = process.env.OPENAI_API_KEY
 console.log("ApiKey", ApiKey)
-const configuration = new Configuration({
-  apiKey: ApiKey,
-});
-console.log("configuration", configuration)
-const openai = new OpenAIApi(configuration);
-console.log("openai", openai)
 
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+//console.log("configuration",configuration)
+const openai = new OpenAIApi(configuration);
+//console.log("openai", openai)
 
 exports.findAnswer = async (req, res) => {
   try {
-    const completion = await openai.createCompletion({
-      model: "text-davinci-001",
-      prompt: "Whats is the capital of india??",
-    });
+    const userQuestion = req.body.question;
+    console.log("userQuestion", userQuestion)
+    if (!userQuestion) {
+      return res.status(400).json({
+        msg: 'Bad Request: Missing question field in the request body.',
+        status: 400,
+      });
+    }
 
-    console.log(completion.data.choices[0].text);
-    res.json({
-      response: completion.data.choices[0].text,
-      status: 200,
+    // Generate a response from OpenAI
+    const completion = await openai.createCompletion({
+      model: 'text-davinci-001',
+      prompt: userQuestion,
     });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "An error occurred while processing your request." });
+    console.log("completion", completion)
+    const assistantAnswer = completion.data.choices[0].text;
+    console.log("assistantAnswer", assistantAnswer)
+
+    // Save the user question and the assistant's answer to the MongoDB collection
+    const savedEntry = await QuestionAnswer.create({
+      question: userQuestion,
+      answer: assistantAnswer,
+    });
+    console.log("savedEntry", savedEntry)
+    // Send the answer as a response to the client
+    res.json({
+      status: 200,
+      data: assistantAnswer,
+      msg: 'Successfully Retrieved Answer',
+      savedEntry: savedEntry, // Optional: Send the saved database entry back in the response
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({
+      err: err,
+      msg: 'Error Detected',
+      status: 400,
+    });
   }
 };
-
 
 
 exports.conversion = (async (req, res) => {
@@ -98,10 +125,10 @@ exports.sendMessage = async (req, res) => {
     console.log("answer", answer)
     // Save the question and answer to the database
     const chatMessage = new Chat({
-      message: question,
+      message: req.body.message,
       userId: senderId,
       receiveId: receiverId,
-      answer: answer,
+
     });
     const savedMessage = await chatMessage.save();
 
@@ -128,8 +155,7 @@ exports.sendMessage = async (req, res) => {
       receiveId: receiverId,
       status: true,
       success: true,
-      message: savedMessage,
-      answer: answer,
+      message: savedMessage
     });
   } catch (error) {
     console.log(error);

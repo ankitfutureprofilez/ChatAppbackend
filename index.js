@@ -26,33 +26,33 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
 
-const { Configuration, OpenAIApi } = require("openai");
+// const { Configuration, OpenAIApi } = require("openai");
 
-const ApiKey = process.env.OPENAI_API_KEY
+// const ApiKey = process.env.OPENAI_API_KEY
 
-const configuration = new Configuration({
-    apiKey: ApiKey,
-});
+// const configuration = new Configuration({
+//     apiKey: ApiKey,
+// });
 
-const openai = new OpenAIApi(configuration);
-//console.log("openai", openai)
-app.post("/find", async (req, res) => {
-    try {
-        const completion = await openai.createCompletion({
-            model: "text-davinci-001",
-            prompt: "Whats is the capital of india??",
-        });
-        console.log(completion.data.choices[0].text);
-        res.json({
-            response: completion.data.choices[0].text,
-            status: 200
+// const openai = new OpenAIApi(configuration);
+// //console.log("openai", openai)
+// app.post("/find", async (req, res) => {
+//     try {
+//         const completion = await openai.createCompletion({
+//             model: "text-davinci-001",
+//             prompt: "Whats is the capital of india??",
+//         });
+//         console.log(completion.data.choices[0].text);
+//         res.json({
+//             response: completion.data.choices[0].text,
+//             status: 200
 
-        })
-    } catch (error) {
-        console.log(error)
-    }
+//         })
+//     } catch (error) {
+//         console.log(error)
+//     }
 
-})
+// })
 
 const apirouter = require('./routes/Index')
 
@@ -82,7 +82,7 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 
 const io = new Server(server, {
     cors: {
-        origin: 'https://chat-appbackend-3gbn.vercel.app/', // Change this to the frontend's URL
+        origin: 'http://localhost:3000', // Change this to the frontend's URL
         methods: ['GET', 'POST'],
     },
 });

@@ -98,8 +98,6 @@ const io = new Server(server, {
     },
 });
 
-// Backend (Node.js) - Socket.IO Event Handling
-
 io.on('connection', (socket) => {
     console.log(`user connected ${socket.id}`);
     socket.on('join-room', (data) => {
@@ -118,9 +116,9 @@ io.on('connection', (socket) => {
         const savedMessage = await message.save();
   
         // Emit the message to the recipient's socket room
-        io.to(data.receiveId).emit("send-message", {
+        io.to(data.receiveId).emit("test-event", {
           userId: data.userId,
-          author: data.username, // Use 'username' instead of 'author'
+          author: data.username,
           receiveId: data.receiveId,
           message: data.message,
           time: new Date().toLocaleTimeString(),

@@ -118,7 +118,7 @@ exports.sendMessage = async (req, res) => {
     // Process the question and get the answer
    
  
-    console.log("answer", answer)
+   
     // Save the question and answer to the database
     const chatMessage = new Chat({
       message: req.body.message,
@@ -145,7 +145,7 @@ exports.sendMessage = async (req, res) => {
     }
 
     // Emit the message to the recipient's socket
-    io.to(receiverId).emit('test-event', { message: question, senderId });
+    io.to(receiverId).emit('test-event', { message: req.body.message, senderId });
 
     res.json({
       receiveId: receiverId,

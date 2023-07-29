@@ -9,7 +9,9 @@ const app = express();
 
 const cors = require('cors');
 // Allow all origins
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+  }));
 // Allow specific origin(s)
 // app.use(cors({
 //   origin: 'https://yourdeployedsite.com'

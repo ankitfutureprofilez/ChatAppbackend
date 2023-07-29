@@ -6,7 +6,7 @@ const chatController = require('../controller/chatController')
 
 const verifyUserToken = require('../middleware/Auth')
 
-routes.post("/findAnswer",verifyUserToken,chatController.findAnswer)
+//routes.post("/findAnswer",verifyUserToken,chatController.findAnswer)
 
 routes.post('/signup', userController.singup)
 

@@ -7,11 +7,13 @@ const http = require('http');
 
 const app = express();
 
-const cors = require("cors")
-
-app.use(
-   cors()
-);
+const cors = require('cors');
+// Allow all origins
+app.use(cors());
+// Allow specific origin(s)
+// app.use(cors({
+//   origin: 'https://yourdeployedsite.com'
+// }));
 
 const server = http.createServer(app);
 

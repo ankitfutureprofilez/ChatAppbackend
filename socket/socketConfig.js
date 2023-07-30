@@ -1,6 +1,6 @@
 
 const io = require('socket.io')(server, {
-    cors: { origin: "http://localhost:3000" },
+    cors: { origin: "https://chat-appbackend-kbvv.vercel.app" },
 });
 
 io.on("connection", (socket) => {

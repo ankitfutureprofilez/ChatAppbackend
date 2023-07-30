@@ -10,7 +10,7 @@ const app = express();
 const cors = require('cors');
 // Allow all origins
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://chat-appbackend-kbvv.vercel.app',
   }));
 // Allow specific origin(s)
 // app.use(cors({
@@ -93,7 +93,7 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000', // Change this to the frontend's URL
+        origin: 'https://chat-appbackend-kbvv.vercel.app', // Change this to the frontend's URL
         methods: ['GET', 'POST'],
     },
 });
@@ -109,23 +109,23 @@ io.on('connection', (socket) => {
             // Save the message to the database
             const message = new Chat({
                 userId: data.userId,
-                receiveId: data.receiveId,
+                receiverId: data.receiverId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
             });
             const savedMessage = await message.save();
 
             // Emit the message to the recipient's socket room
-            socket.to(data.receiveId).emit("test-event", {
-                userId: data.userId,
-                author: data.username,
-                receiveId: data.receiveId,
+            io.to(data.userId).emit('test-event', {
+                receiverId: data.userId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
             });
+
+            
             
             console.log('Message saved and emitted:', savedMessage);
-            console.log('Receiver Message:', message);
+            console.log('test-event:', message);
         } catch (err) {
             console.log(err);
         }

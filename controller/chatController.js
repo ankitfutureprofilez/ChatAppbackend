@@ -12,55 +12,55 @@ const ApiKey = process.env.OPENAI_API_KEY
 console.log("ApiKey", ApiKey)
 
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: ApiKey,
 });
 
-//console.log("configuration",configuration)
+console.log("configuration",configuration)
 const openai = new OpenAIApi(configuration);
-//console.log("openai", openai)
+console.log("openai", openai)
 
-// exports.findAnswer = async (req, res) => {
-//   try {
-//     const userQuestion = req.body.question;
-//     console.log("userQuestion", userQuestion)
-//     if (!userQuestion) {
-//       return res.status(400).json({
-//         msg: 'Bad Request: Missing question field in the request body.',
-//         status: 400,
-//       });
-//     }
+exports.findAnswer = async (req, res) => {
+  try {
+    const userQuestion = req.body.question;
+    console.log("userQuestion", userQuestion)
+    if (!userQuestion) {
+      return res.status(400).json({
+        msg: 'Bad Request: Missing question field in the request body.',
+        status: 400,
+      });
+    }
 
-//     // Generate a response from OpenAI
-//     const completion = await openai.createCompletion({
-//       model: 'text-davinci-001',
-//       prompt: userQuestion,
-//     });
-//     console.log("completion", completion)
-//     const assistantAnswer = completion.data.choices[0].text;
-//     console.log("assistantAnswer", assistantAnswer)
+    // Generate a response from OpenAI
+    const completion = await openai.createCompletion({
+      model: 'text-davinci-001',
+      prompt: userQuestion,
+    });
+    console.log("completion", completion)
+    const assistantAnswer = completion.data.choices[0].text;
+    console.log("assistantAnswer", assistantAnswer)
 
-//     // Save the user question and the assistant's answer to the MongoDB collection
-//     const savedEntry = await QuestionAnswer.create({
-//       question: userQuestion,
-//       answer: assistantAnswer,
-//     });
-//     console.log("savedEntry", savedEntry)
-//     // Send the answer as a response to the client
-//     res.json({
-//       status: 200,
-//       data: assistantAnswer,
-//       msg: 'Successfully Retrieved Answer',
-//       savedEntry: savedEntry, // Optional: Send the saved database entry back in the response
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     res.json({
-//       err: err,
-//       msg: 'Error Detected',
-//       status: 400,
-//     });
-//   }
-// };
+    // Save the user question and the assistant's answer to the MongoDB collection
+    const savedEntry = await QuestionAnswer.create({
+      question: userQuestion,
+      answer: assistantAnswer,
+    });
+    console.log("savedEntry", savedEntry)
+    // Send the answer as a response to the client
+    res.json({
+      status: 200,
+      data: assistantAnswer,
+      msg: 'Successfully Retrieved Answer',
+      savedEntry: savedEntry, // Optional: Send the saved database entry back in the response
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({
+      err: err,
+      msg: 'Error Detected',
+      status: 400,
+    });
+  }
+};
 
 
 exports.conversion = (async (req, res) => {

@@ -7,21 +7,28 @@ const http = require('http');
 
 const app = express();
 
+
+const dotenv = require('dotenv');
+dotenv.config({path:'config.env'});
+
+const URL= process.env.URL
+console.log("URL",process.env.URL)
+
+
 const cors = require('cors');
 // Allow all origins
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: URL,
 }));
+//console.log("cors",cors)
 // Allow specific origin(s)
 // app.use(cors({
 //   origin: 'https://yourdeployedsite.com'
 // }));
-
 const server = http.createServer(app);
 
 
 
-require('dotenv').config()
 
 const { Server } = require('socket.io');
 
@@ -93,7 +100,7 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000', // Change this to the frontend's URL
+        origin: URL, // Change this to the frontend's URL
         methods: ['GET', 'POST'],
     },
 });

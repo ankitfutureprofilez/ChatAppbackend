@@ -3,7 +3,7 @@ const user = require('../models/Users')
 const Conversation = require("../models/Converstion")
 const io = require('socket.io')(); // Don't need this since io is initialized in the server file
 const QuestionAnswer = require('../models/OpenAi')
-require('dotenv').config()
+require('dotenv').config();
 
 
 const { Configuration, OpenAIApi } = require("openai");

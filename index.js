@@ -10,7 +10,7 @@ const app = express();
 const cors = require('cors');
 // Allow all origins
 app.use(cors({
-    origin: 'https://chat-app-silk-pi.vercel.app/',
+    origin: 'http://chat-app-silk-pi.vercel.app/',
 }));
 // Allow specific origin(s)
 // app.use(cors({
@@ -93,7 +93,7 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 
 const io = new Server(server, {
     cors: {
-        origin: 'https://chat-app-silk-pi.vercel.app', // Change this to the frontend's URL
+        origin: 'http://chat-app-silk-pi.vercel.app', // Change this to the frontend's URL
         methods: ['GET', 'POST'],
     },
 });

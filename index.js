@@ -109,7 +109,7 @@ io.on('connection', (socket) => {
             // Save the message to the database
             const message = new Chat({
                 userId: data.userId,
-                receiverId: data.receiverId,
+                receiveId: data.receiveId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
             });
@@ -117,21 +117,19 @@ io.on('connection', (socket) => {
 
             // Emit the message to the recipient's socket room
             io.to(data.userId).emit('test-event', {
-                receiverId: data.userId,
+                receiveId: data.receiveId,
+                author: data.username,
+                userId: data.userId,
                 message: data.message,
                 time: new Date().toLocaleTimeString(),
             });
-
-            
-            
             console.log('Message saved and emitted:', savedMessage);
-            console.log('test-event:', message);
+            console.log('Receiver Message:', message);
         } catch (err) {
             console.log(err);
         }
     });
 });
-
 
 // Start the server
 const PORT = process.env.PORT; // Change this to the desired port

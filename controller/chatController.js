@@ -114,37 +114,49 @@ exports.sendMessage = async (req, res) => {
   try {
     const receiverId = req.body.receiverId;
     const senderId = req.user.userId; // Assuming the authenticated user's ID is available in req.user.userId
+
     // Process the question and get the answer
+    const question = "What is the capital of India?";
+    const answerCompletion = await openai.createCompletion({
+      model: "text-davinci-001",
+      prompt: question,
+    });
+    const answer = answerCompletion.data.choices[0].text;
+    console.log("answer", answer)
     // Save the question and answer to the database
     const chatMessage = new Chat({
-      message: req.body.message,
+      message: question,
       userId: senderId,
-      receiverId: receiverId,
-
+      receiveId: receiverId,
+      answer: answer,
     });
     const savedMessage = await chatMessage.save();
-    console.log("savedMessage",savedMessage)
+
     // Create or update the conversation ID
     const lastUid = await Conversation.findOne({}, "uid").sort({ uid: -1 });
     const newUid = lastUid ? +lastUid.uid + 1 : 1;
+
     if (lastUid) {
       console.log("Given the conversation ID");
     } else {
       const conversation = new Conversation({
         userId: senderId,
-        receiverId: receiverId, 
+        receiverId: receiverId,
         uid: newUid,
       });
       const newConversation = await conversation.save();
       console.log("newConversation", newConversation);
     }
+
     // Emit the message to the recipient's socket
-    io.to(receiverId).emit('test-event', { message: req.body.message, senderId });
+    io.to(receiverId).emit('test-event', { message: question, senderId });
+
     res.json({
-      receiverId: receiverId,
+      receiveId: receiverId,
       status: true,
       success: true,
-      message: savedMessage
+      message: savedMessage,
+      answer: answer,
     });
   } catch (error) {
     console.log(error);
@@ -154,12 +166,12 @@ exports.sendMessage = async (req, res) => {
 
 
 exports.chatsMessageList = (async (req, res) => {
-  //console.log(req.params)
-  const { receiverId } = req.params;
- // console.log("receiveId", receiveId,)
+  console.log(req.params)
+  const { receiveId } = req.params;
+  console.log("receiveId", receiveId,)
   try {
-    const records = await Chat.find({ receiverId: receiverId });
- //   console.log("records", records)
+    const records = await Chat.find({ receiveId: receiveId });
+    console.log("records", records)
     res.json({
       chats: records,
       msg: "Succes",

@@ -10,8 +10,8 @@ const app = express();
 const cors = require('cors');
 // Allow all origins
 app.use(cors({
-    origin: 'http://localhost:3000/',
-  }));
+    origin: 'http://localhost:3000',
+}));
 // Allow specific origin(s)
 // app.use(cors({
 //   origin: 'https://yourdeployedsite.com'
@@ -78,10 +78,10 @@ mongoose.connect(`${process.env.DB_URL}`, {
     console.error('MongoDB connection error: ', err);
 });
 
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
     res.json({
-        "msg":"Herrr",
-        status:true
+        "msg": "Herrr",
+        status: true
     })
 })
 

@@ -18,7 +18,7 @@ console.log("URL",process.env.URL)
 const cors = require('cors');
 // Allow all origins
 app.use(cors({
-    origin: URL,
+    origin:"https://chat-app-silk-pi.vercel.app",
 }));
 //console.log("cors",cors)
 // Allow specific origin(s)

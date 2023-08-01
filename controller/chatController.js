@@ -138,7 +138,7 @@ exports.sendMessage = async (req, res) => {
         uid: newUid,
       });
       const newConversation = await conversation.save();
-      console.log("newConversation", newConversation);
+    //  console.log("newConversation", newConversation);
     }
 
     // Emit the message to the recipient's socket
@@ -149,7 +149,7 @@ exports.sendMessage = async (req, res) => {
       status: true,
       success: true,
       message: savedMessage,
-      answer: answer,
+  
     });
   } catch (error) {
     console.log(error);

@@ -9,7 +9,7 @@ const app = express();
 const cors = require('cors');
 // Allow all origins
 app.use(cors({
-    origin: "https://chat-app-silk-pi.vercel.app",
+    origin: "http://chat-app-silk-pi.vercel.app",
 }));
 
 const dotenv = require('dotenv');
@@ -88,7 +88,7 @@ app.get('/', (req, res) => {
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 const io = new Server(server, {
     cors: {
-        origin: "https://chat-app-silk-pi.vercel.app",
+        origin: "http://chat-app-silk-pi.vercel.app",
        
     },
 });

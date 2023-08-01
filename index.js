@@ -98,7 +98,7 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 
 const io = new Server(server, {
     cors: {
-        origin: "http://chat-appbackend.vercel.app/", // Change this to the frontend's URL
+        origin: "*", // Change this to the frontend's URL
         methods: ['GET', 'POST'],
     },
 });

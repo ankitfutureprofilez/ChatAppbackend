@@ -11,14 +11,14 @@ const app = express();
 const dotenv = require('dotenv');
 dotenv.config({ path: 'config.env' });
 
-const URL = process.env.URL
-console.log("URL", process.env.URL)
+const URL = process.env.FRONTENDURL
+console.log("URL", process.env.FRONTENDURL)
 
 
 const cors = require('cors');
 // Allow all origins
 app.use(cors({
-    origin: "https://chat-app-silk-pi.vercel.app",
+    origin: process.env.FRONTENDURL,
 }));
 //console.log("cors",cors)
 // Allow specific origin(s)
@@ -98,7 +98,7 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 
 const io = new Server(server, {
     cors: {
-        origin: "https://chat-app-silk-pi.vercel.app", // Change this to the frontend's URL
+        origin: process.env.FRONTENDURL, // Change this to the frontend's URL
         methods: ['GET', 'POST'],
     },
 });

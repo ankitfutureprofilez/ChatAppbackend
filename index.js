@@ -16,7 +16,7 @@ const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)
 
 app.use(cors({
-    origin: process.env.FRONTENDURL,
+    origin: "*",
 }));
 
 

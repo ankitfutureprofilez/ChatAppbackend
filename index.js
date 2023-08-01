@@ -98,11 +98,10 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 
 const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: "http://chat-appbackend.vercel.app/", // Change this to the frontend's URL
         methods: ['GET', 'POST'],
     },
 });
-
 //console.log("io", io)
 io.on('connection', (socket) => {
     console.log(`user connected ${socket.id}`);

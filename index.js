@@ -25,7 +25,7 @@ const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize('database', 'username', 'password', {
-  host: '*',
+  host: 'https://chat-app-silk-pi.vercel.app',
   dialect: 'mysql',
   // Other Sequelize options
 });

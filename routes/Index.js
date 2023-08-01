@@ -10,7 +10,8 @@ routes.post("/findAnswer",verifyUserToken,chatController.findAnswer)
 
 routes.post('/signup', userController.singup)
 
-routes.post('/', userController.Login)
+
+routes.post('/login', userController.Login)
 
 routes.get('/user', verifyUserToken, userController.user)
 

@@ -97,10 +97,11 @@ app.get('/', (req, res) => {
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 const io = new Server(server, {
     cors: {
-        origin: "*", // Change this to the frontend's URL
+        origin: "https://chat-app-silk-pi.vercel.app",
         methods: ['GET', 'POST'],
     },
 });
+
 //console.log("io", io)
 io.on('connection', (socket) => {
     console.log(`user connected ${socket.id}`);

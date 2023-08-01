@@ -97,7 +97,7 @@ app.get('/', (req, res) => {
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 const io = new Server(server, {
     cors: {
-        origin: "https://chat-app-silk-pi.vercel.app",
+        origin: "*",
         methods: ['GET', 'POST'],
     },
 });

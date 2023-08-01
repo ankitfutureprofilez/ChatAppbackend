@@ -1,12 +1,16 @@
 // app.js
 //import express from "express"
 const express = require('express');
-const session = require('express-session');
 const http = require('http');
 
 
 const app = express();
 
+const cors = require('cors');
+// Allow all origins
+app.use(cors({
+    origin: "*",
+}));
 
 const dotenv = require('dotenv');
 dotenv.config({ path: 'config.env' });
@@ -15,11 +19,6 @@ const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)
 
 
-const cors = require('cors');
-// Allow all origins
-app.use(cors({
-    origin: "*",
-}));
 
 const server = http.createServer(app);
 const { Server } = require('socket.io');
@@ -89,7 +88,7 @@ app.get('/', (req, res) => {
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: "https://chat-app-silk-pi.vercel.app",
     },
 });
 

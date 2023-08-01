@@ -21,14 +21,32 @@ app.use(cors({
     origin: "*",
 }));
 
+const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const { Sequelize } = require('sequelize');
+const sequelize = new Sequelize('database', 'username', 'password', {
+  host: 'localhost',
+  dialect: 'mysql',
+  // Other Sequelize options
+});
+
+// Create the SequelizeStore with your Sequelize instance
+const sessionStore = new SequelizeStore({
+  db: sequelize,
+});
+
+// Set up the session middleware
 app.use(
-    session({
-      secret: 'your-secret-key',
-      resave: false,
-      saveUninitialized: true,
-      // Optionally, you can configure other options as needed
-    })
-  );
+  session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+  })
+);
+// Sync the session store with the database
+sessionStore.sync();
+
 const server = http.createServer(app);
 
 

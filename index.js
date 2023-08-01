@@ -1,7 +1,7 @@
 // app.js
 //import express from "express"
 const express = require('express');
-
+const session = require('express-session');
 const http = require('http');
 
 
@@ -20,11 +20,15 @@ const cors = require('cors');
 app.use(cors({
     origin: "*",
 }));
-//console.log("cors",cors)
-// Allow specific origin(s)
-// app.use(cors({
-//   origin: 'https://yourdeployedsite.com'
-// }));
+
+app.use(
+    session({
+      secret: 'your-secret-key',
+      resave: false,
+      saveUninitialized: true,
+      // Optionally, you can configure other options as needed
+    })
+  );
 const server = http.createServer(app);
 
 

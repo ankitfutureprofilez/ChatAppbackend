@@ -9,7 +9,7 @@ const app = express();
 const cors = require('cors');
 // Allow all origins
 app.use(cors({
-    origin: "*",
+    origin: process.env.FRONTENDURL,
 }));
 
 const dotenv = require('dotenv');

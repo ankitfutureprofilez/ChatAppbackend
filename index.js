@@ -18,7 +18,7 @@ console.log("URL", process.env.FRONTENDURL)
 const cors = require('cors');
 // Allow all origins
 app.use(cors({
-    origin: process.env.ORIGINS,
+    origin: "*",
 }));
 //console.log("cors",cors)
 // Allow specific origin(s)
@@ -98,7 +98,7 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 
 const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTENDURL, // Change this to the frontend's URL
+        origin: "*", // Change this to the frontend's URL
         methods: ['GET', 'POST'],
     },
 });

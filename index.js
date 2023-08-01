@@ -18,7 +18,7 @@ console.log("URL", process.env.FRONTENDURL)
 const cors = require('cors');
 // Allow all origins
 app.use(cors({
-    origin: process.env.FRONTENDURL,
+    origin: process.env.ORIGINS,
 }));
 //console.log("cors",cors)
 // Allow specific origin(s)

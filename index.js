@@ -104,7 +104,7 @@ const io = new Server(server, {
         methods: ['GET', 'POST'],
     },
 });
-console.log("io",io)
+//console.log("io", io)
 io.on('connection', (socket) => {
     console.log(`user connected ${socket.id}`);
     socket.on('join-room', (data) => {

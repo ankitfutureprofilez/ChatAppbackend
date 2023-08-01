@@ -35,7 +35,7 @@ exports.findAnswer = async (req, res) => {
       model: 'text-davinci-001',
       prompt: userQuestion,
     });
-    console.log("completion", completion)
+   //console.log("completion", completion)
     const assistantAnswer = completion.data.choices[0].text;
     //console.log("assistantAnswer", assistantAnswer)
 
@@ -115,20 +115,13 @@ exports.sendMessage = async (req, res) => {
     const receiverId = req.body.receiverId;
     const senderId = req.user.userId; // Assuming the authenticated user's ID is available in req.user.userId
 
-    // Process the question and get the answer
-    const question = "What is the capital of India?";
-    const answerCompletion = await openai.createCompletion({
-      model: "text-davinci-001",
-      prompt: question,
-    });
-    const answer = answerCompletion.data.choices[0].text;
-    console.log("answer", answer)
+    // Process the question and get the answe
     // Save the question and answer to the database
     const chatMessage = new Chat({
-      message: question,
+      message: req.body.message,
       userId: senderId,
       receiveId: receiverId,
-      answer: answer,
+      
     });
     const savedMessage = await chatMessage.save();
 
@@ -149,7 +142,7 @@ exports.sendMessage = async (req, res) => {
     }
 
     // Emit the message to the recipient's socket
-    io.to(receiverId).emit('test-event', { message: question, senderId });
+    io.to(receiverId).emit('test-event', { message: req.body.message, senderId });
 
     res.json({
       receiveId: receiverId,

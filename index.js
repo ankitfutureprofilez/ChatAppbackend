@@ -21,36 +21,7 @@ app.use(cors({
     origin: "*",
 }));
 
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize('database', 'username', 'password', {
-  host: 'https://chat-app-silk-pi.vercel.app',
-  dialect: 'mongodb',
-  // Other Sequelize options
-});
-
-// Create the SequelizeStore with your Sequelize instance
-const sessionStore = new SequelizeStore({
-  db: sequelize,
-});
-
-// Set up the session middleware
-app.use(
-  session({
-    secret: 'your-secret-key',
-    resave: false,
-    saveUninitialized: false,
-    store: sessionStore,
-  })
-);
-// Sync the session store with the database
-sessionStore.sync();
-
 const server = http.createServer(app);
-
-
-
-
 const { Server } = require('socket.io');
 
 const mongoose = require("mongoose")

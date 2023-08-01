@@ -16,7 +16,7 @@ const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)
 
 app.use(cors({
-    origin: "*",
+    origin: URL,
 }));
 
 
@@ -88,7 +88,7 @@ app.get('/', (req, res) => {
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTENDURL,
+        origin: "http://localhost:3000",
        
     },
 });

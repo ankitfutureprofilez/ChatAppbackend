@@ -9,7 +9,7 @@ const app = express();
 const cors = require('cors');
 // Allow all origins
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: "https://chat-app-silk-pi.vercel.app",
 }));
 
 const dotenv = require('dotenv');
@@ -88,7 +88,7 @@ app.get('/', (req, res) => {
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "https://chat-app-silk-pi.vercel.app",
        
     },
 });
@@ -112,7 +112,7 @@ io.on('connection', (socket) => {
             const savedMessage = await message.save();
 
             // Emit the message to the recipient's socket room
-            io.to(data.userId).emit('test-event', {
+            io.to(data.receiveId).emit('test-event', {
                 receiveId: data.receiveId,
                 author: data.username,
                 userId: data.userId,

@@ -98,7 +98,6 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 const io = new Server(server, {
     cors: {
         origin: "*",
-        methods: ['GET', 'POST'],
     },
 });
 

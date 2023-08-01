@@ -69,7 +69,7 @@ app.use(bodyParser.json())
 
 const apirouter = require('./routes/Index')
 
-app.use("/api", apirouter)
+app.use("/", apirouter)
 
 mongoose.connect(`${process.env.DB_URL}`, {
     useNewUrlParser: true,
@@ -85,7 +85,7 @@ mongoose.connect(`${process.env.DB_URL}`, {
     console.error('MongoDB connection error: ', err);
 });
 
-app.get('/', (req, res) => {
+app.get('/qq', (req, res) => {
     res.json({
         "msg": "Herrr",
         status: true

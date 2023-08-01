@@ -9,7 +9,7 @@ require('dotenv').config();
 const { Configuration, OpenAIApi } = require("openai");
 
 const ApiKey = process.env.OPENAI_API_KEY
-console.log("ApiKey", ApiKey)
+//console.log("ApiKey", ApiKey)
 
 const configuration = new Configuration({
   apiKey: ApiKey,
@@ -22,7 +22,7 @@ const openai = new OpenAIApi(configuration);
 exports.findAnswer = async (req, res) => {
   try {
     const userQuestion = req.body.question;
-    console.log("userQuestion", userQuestion)
+   // console.log("userQuestion", userQuestion)
     if (!userQuestion) {
       return res.status(400).json({
         msg: 'Bad Request: Missing question field in the request body.',
@@ -37,14 +37,14 @@ exports.findAnswer = async (req, res) => {
     });
     console.log("completion", completion)
     const assistantAnswer = completion.data.choices[0].text;
-    console.log("assistantAnswer", assistantAnswer)
+    //console.log("assistantAnswer", assistantAnswer)
 
     // Save the user question and the assistant's answer to the MongoDB collection
     const savedEntry = await QuestionAnswer.create({
       question: userQuestion,
       answer: assistantAnswer,
     });
-    console.log("savedEntry", savedEntry)
+    // console.log("savedEntry", savedEntry)
     // Send the answer as a response to the client
     res.json({
       status: 200,

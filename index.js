@@ -88,7 +88,7 @@ app.get('/', (req, res) => {
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
        
     },
 });

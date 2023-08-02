@@ -6,7 +6,7 @@ const socketio = require('socket.io');
 
 const app = express();
 
-//const cors = require('cors');
+const cors = require('cors');
 // Allow all origins
 
 const dotenv = require('dotenv');
@@ -15,7 +15,7 @@ dotenv.config({ path: 'config.env' });
 const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)
 
-//app.use(cors());
+app.use(cors());
 
 const server = http.createServer(app);
 const { Server } = require('socket.io');

@@ -16,9 +16,9 @@ const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)
 
 app.use(cors({
-    origin:process.env.FRONTENDURL ,
+    origin:process.env.FRONTENDURL,
+    credentials: true,
 }));
-
 
 const server = http.createServer(app);
 const { Server } = require('socket.io');
@@ -87,14 +87,15 @@ app.get('/', (req, res) => {
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 
 const options =["https://chat-app-sigma-seven.vercel.app","http://localhost:3000"]
+
+
 const io = new Server(server, {
     cors: {
-        origin: options,
-        methods: ["GET", "POST"],
-        "Access-Control-Allow-Origin": "*",
-        exposedHeaders: ["my-custom-header"],
+      origin: process.env.FRONTENDURL, // Replace with the allowed origin of your frontend application
+      methods: ["GET", "POST"],
+      credentials: true, // Allow credentials (e.g., cookies) to be sent to the server
     },
-    allowEIO3: true,
+    allowEIO3: true, // This allows supporting older clients that use socket.io version 3
 });
 
 //console.log("io", io)

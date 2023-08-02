@@ -10,7 +10,7 @@ const server = http.createServer(app);
 const io = socketio(server, { cors: { origin: '*' } });
 
 app.use(cors());
-
+app.options('*', cors());
 const dotenv = require('dotenv');
 dotenv.config({ path: 'config.env' });
 

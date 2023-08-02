@@ -10,9 +10,11 @@ dotenv.config({ path: 'config.env' });
 const app = express();
 
 // app.use(cors());
-app.options('*', cors());
+app.use(cors({
+    origin: '*',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }));
 const server = http.createServer(app);
-const io = socketio(server, { cors: { origin: '*' } });
 
 const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)
@@ -28,49 +30,49 @@ app.use(bodyParser.json())
 // const ApiKey = process.env.OPENAI_API_KEY
 
 // const configuration = new Configuration({
-//     apiKey: ApiKey,
-// });
-
-// const openai = new OpenAIApi(configuration);
-// //console.log("openai", openai)
-// app.post("/find", async (req, res) => {
-//     try {
-//         const completion = await openai.createCompletion({
-//             model: "text-davinci-001",
-//             prompt: "Whats is the capital of india??",
-//         });
-//         console.log(completion.data.choices[0].text);
-//         res.json({
-//             response: completion.data.choices[0].text,
-//             status: 200
-
-//         })
-//     } catch (error) {
-//         console.log(error)
-//     }
-
-// })
-
-const apirouter = require('./routes/Index')
-
-app.use("/", apirouter)
-
-mongoose.connect(`${process.env.DB_URL}`, {
-    useNewUrlParser: true,
-    serverSelectionTimeoutMS: 5000,
-    autoIndex: false, // Don't build indexes 
-    maxPoolSize: 10, // Maintain up to 10 socket connections
-    serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-    socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-    family: 4 // Use IPv4, skip trying IPv6 
-}).then(() => {
-    console.log('MongoDB connected successfully');
-}).catch((err) => {
-    console.error('MongoDB connection error: ', err);
-});
-
-app.get('/', (req, res) => {
-    res.json({
+    //     apiKey: ApiKey,
+    // });
+    
+    // const openai = new OpenAIApi(configuration);
+    // //console.log("openai", openai)
+    // app.post("/find", async (req, res) => {
+        //     try {
+            //         const completion = await openai.createCompletion({
+                //             model: "text-davinci-001",
+                //             prompt: "Whats is the capital of india??",
+                //         });
+                //         console.log(completion.data.choices[0].text);
+                //         res.json({
+                    //             response: completion.data.choices[0].text,
+                    //             status: 200
+                    
+                    //         })
+                    //     } catch (error) {
+                        //         console.log(error)
+                        //     }
+                        
+                        // })
+                        
+                        const apirouter = require('./routes/Index')
+                        
+                        app.use("/", apirouter)
+                        
+                        mongoose.connect(`${process.env.DB_URL}`, {
+                            useNewUrlParser: true,
+                            serverSelectionTimeoutMS: 5000,
+                            autoIndex: false, // Don't build indexes 
+                            maxPoolSize: 10, // Maintain up to 10 socket connections
+                            serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+                            socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+                            family: 4 // Use IPv4, skip trying IPv6 
+                        }).then(() => {
+                            console.log('MongoDB connected successfully');
+                        }).catch((err) => {
+                            console.error('MongoDB connection error: ', err);
+                        });
+                        
+                        app.get('/', (req, res) => {
+                            res.json({
         "msg": "Herrr",
         status: true
     })
@@ -78,11 +80,12 @@ app.get('/', (req, res) => {
 
 
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
+const io = socketio(server, { cors: { origin: '*' } });
 
 // const io = new Server(server,{
 //     cors:{
-//         //origin: "https://earnest-frangollo-98f50d.netlify.app/",
-//         reconnect: true
+    //         //origin: "https://earnest-frangollo-98f50d.netlify.app/",
+    //         reconnect: true
 //     }
 // });
 

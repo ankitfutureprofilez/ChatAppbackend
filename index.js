@@ -88,8 +88,8 @@ const Chat = require('./models/Messages'); // Assuming the correct path to your 
 const options =["https://chat-app-sigma-seven.vercel.app","http://localhost:3000"]
 
 
-const io = socketio(server, {
-    origin:process.env.FRONTENDURL,
+const io = socketio(httpServer, {
+    origin: '*',,
 });
 
 //console.log("io", io)

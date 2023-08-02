@@ -5,14 +5,14 @@ const http = require('http');
 const socketio = require('socket.io');
 const cors = require('cors');
 
-const app = express();
-const server = http.createServer(app);
-const io = socketio(server, { cors: { origin: '*' } });
-
-app.use(cors());
-app.options('*', cors());
 const dotenv = require('dotenv');
 dotenv.config({ path: 'config.env' });
+const app = express();
+
+// app.use(cors());
+app.options('*', cors());
+const server = http.createServer(app);
+const io = socketio(server, { cors: { origin: '*' } });
 
 const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)

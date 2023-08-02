@@ -89,7 +89,7 @@ const options =["https://chat-app-sigma-seven.vercel.app","http://localhost:3000
 
 
 const io = socketio(httpServer, {
-    origin: '*',,
+    origin: '*',
 });
 
 //console.log("io", io)

@@ -15,9 +15,7 @@ dotenv.config({ path: 'config.env' });
 const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)
 
-app.use(cors({
-    origin: '*',
-  }));
+app.use(cors());
 
 const server = http.createServer(app);
 const { Server } = require('socket.io');
@@ -85,7 +83,6 @@ app.get('/', (req, res) => {
 
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 
-const options =["https://chat-app-sigma-seven.vercel.app","http://localhost:3000"]
 
 
 const io = socketio(server, {

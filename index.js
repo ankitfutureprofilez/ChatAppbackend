@@ -3,23 +3,19 @@
 const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
+const cors = require('cors');
 
 const app = express();
+const server = http.createServer(app);
+const io = socketio(server, { cors: { origin: '*' } });
 
-const cors = require('cors');
-// Allow all origins
+app.use(cors());
 
 const dotenv = require('dotenv');
 dotenv.config({ path: 'config.env' });
 
 const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)
-
-app.use(cors());
-
-const server = http.createServer(app);
-const { Server } = require('socket.io');
-
 const mongoose = require("mongoose")
 
 const bodyParser = require('body-parser')
@@ -83,14 +79,16 @@ app.get('/', (req, res) => {
 
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 
-const io = new Server(server,{
-    cors:{
-        //origin: "https://earnest-frangollo-98f50d.netlify.app/",
-        reconnect: true
-    }
-});
+// const io = new Server(server,{
+//     cors:{
+//         //origin: "https://earnest-frangollo-98f50d.netlify.app/",
+//         reconnect: true
+//     }
+// });
 
- io.set('origins', 'https://earnest-frangollo-98f50d.netlify.app/');
+
+
+ //io.set('origins', 'https://earnest-frangollo-98f50d.netlify.app/');
 //console.log("io", io)
 io.on('connection', (socket) => {
     console.log(`user connected ${socket.id}`);

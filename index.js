@@ -84,13 +84,16 @@ app.get('/', (req, res) => {
 })
 
 
-
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 const io = new Server(server, {
     cors: {
-        origin: "*",
-       
+        origin: "https://chat-app-sigma-seven.vercel.app",
+        credentials: true,
+        methods: ["GET", "POST"],
+        allowedHeaders: ["my-custom-header"],
+        exposedHeaders: ["my-custom-header"],
     },
+    allowEIO3: true,
 });
 
 //console.log("io", io)

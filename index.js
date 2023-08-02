@@ -16,7 +16,7 @@ const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)
 
 app.use(cors({
-    origin: 'https://earnest-frangollo-98f50d.netlify.app',
+    origin: '*',
   }));
 
 const server = http.createServer(app);

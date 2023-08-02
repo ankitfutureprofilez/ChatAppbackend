@@ -84,9 +84,11 @@ app.get('/', (req, res) => {
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 
 
-const io = new Server(server, {
-    origin: "https://earnest-frangollo-98f50d.netlify.app/",
-    reconnect: true
+const io = new Server(server,{
+   cors:{
+       origin: "https://earnest-frangollo-98f50d.netlify.app/",
+       reconnect: true
+   }
 });
 
 //console.log("io", io)

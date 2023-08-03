@@ -18,11 +18,10 @@ const configuration = new Configuration({
 //console.log("configuration",configuration)
 const openai = new OpenAIApi(configuration);
 //console.log("openai", openai)
-
 exports.findAnswer = async (req, res) => {
   try {
     const userQuestion = req.body.question;
-   // console.log("userQuestion", userQuestion)
+    // console.log("userQuestion", userQuestion)
     if (!userQuestion) {
       return res.status(400).json({
         msg: 'Bad Request: Missing question field in the request body.',
@@ -30,14 +29,30 @@ exports.findAnswer = async (req, res) => {
       });
     }
 
-    // Generate a response from OpenAI
-    const completion = await openai.createCompletion({
-      model: 'text-davinci-001',
-      prompt: userQuestion,
-    });
-   //console.log("completion", completion)
-    const assistantAnswer = completion.data.choices[0].text;
-    //console.log("assistantAnswer", assistantAnswer)
+    // Check if the user's question is related to web development
+    const isWebDevelopmentQuestion = isWebDevelopmentRelatedQuestion(userQuestion);
+
+    let assistantAnswer;
+    if (isWebDevelopmentQuestion) {
+      // Predefined answers for specific web development-related questions
+      if (userQuestion.includes('HTML')) {
+        assistantAnswer = 'HTML stands for HyperText Markup Language...';
+      } else if (userQuestion.includes('CSS')) {
+        assistantAnswer = 'CSS stands for Cascading Style Sheets...';
+      } else if (userQuestion.includes('JavaScript')) {
+        assistantAnswer = 'JavaScript is a programming language commonly used for web development...';
+      } else {
+        // If the question is related to web development but not predefined, use AI-generated answer
+        const completion = await openai.createCompletion({
+          model: 'text-davinci-001',
+          prompt: userQuestion,
+        });
+        assistantAnswer = completion.data.choices[0].text;
+      }
+    } else {
+      // If the question is not related to web development, reply with a default message
+      assistantAnswer = "I am not fielded this type of question.";
+    }
 
     // Save the user question and the assistant's answer to the MongoDB collection
     const savedEntry = await QuestionAnswer.create({
@@ -61,6 +76,15 @@ exports.findAnswer = async (req, res) => {
     });
   }
 };
+
+// Helper function to check if a question is related to web development
+function isWebDevelopmentRelatedQuestion(question) {
+  // Implement your logic to determine if the question is related to web development
+  // For example, you can check for keywords related to web development in the question
+  const webDevKeywords = ['web development', 'frontend', 'backend', 'HTML', 'CSS', 'JavaScript', 'framework'];
+  return webDevKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
+}
+
 
 
 exports.conversion = (async (req, res) => {

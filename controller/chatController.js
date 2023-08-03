@@ -35,8 +35,8 @@ exports.findAnswer = async (req, res) => {
     let assistantAnswer;
     if (isWebDevelopmentQuestion) {
       // Predefined answers for specific web development-related questions
-      if (userQuestion.includes('HTML')) {
-        assistantAnswer = 'HTML stands for HyperText Markup Language...';
+      if (userQuestion.includes('HTML' || "CSS")) {
+        assistantAnswer = 'HTML stands for HyperText Markup Language... ' || 'CSS stands for Cascading Style Sheets...';
       } else if (userQuestion.includes('CSS')) {
         assistantAnswer = 'CSS stands for Cascading Style Sheets...';
       } else if (userQuestion.includes('JavaScript')) {

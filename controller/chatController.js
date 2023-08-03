@@ -105,28 +105,16 @@ function handleCompanyQuestion(question) {
   // Check if the question contains any company-related keywords
   if (question.toLowerCase().includes("services")) {
     const answer = getCompanyResponse(lowercaseResponses, "services");
-    return {
-      question: "What services does your company provide?",
-      answer: answer,
-    };
+    return answer;
   } else if (question.toLowerCase().includes("name")) {
     const answer = getCompanyResponse(lowercaseResponses, "name");
-    return {
-      question: "What is your company's name?",
-      answer: answer,
-    };
+    return answer;
   } else if (question.toLowerCase().includes("about")) {
     const answer = getCompanyResponse(lowercaseResponses, "about");
-    return {
-      question: "Tell me about your company.",
-      answer: answer,
-    };
+    return answer;
   } else if (question.toLowerCase().includes("review")) {
     const answer = getCompanyResponse(lowercaseResponses, "review");
-    return {
-      question: "What is your company's Google Review rating?",
-      answer: answer,
-    };
+    return answer;
   } else {
     // If the question is not recognized, return a default response
     return "I'm sorry, I don't have the specific information you are looking for.";

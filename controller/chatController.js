@@ -81,8 +81,8 @@ function isWebDevelopmentRelatedQuestion(question) {
 
 
 function isWebCompanyRelatedQuestion(question) {
-  const CompanyKeywords = ["my company name is Future Profilez", "company services is Mern , react ,node and Mean","company location is jaipur India"];
-  return CompanyKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
+  const companyKeywords = ['company', 'services', 'location'];
+  return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword));
 }
 
 

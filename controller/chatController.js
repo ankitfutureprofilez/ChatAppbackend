@@ -82,7 +82,7 @@ exports.findAnswer = async (req, res) => {
 
 // Helper function to check if a question is related to web development
 function isWebDevelopmentRelatedQuestion(question) {
-  const webDevKeywords = ['MEAN', "React", "Node", "MERN", 'HTML', 'CSS', 'JavaScript', 'fram ework'];
+  const webDevKeywords = ['MEAN', "React", "Node", "MERN", 'HTML', 'CSS', 'JavaScript', 'framework'];
   return webDevKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
 }
 
@@ -93,7 +93,6 @@ function isWebCompanyRelatedQuestion(question) {
 }
 function handleCompanyQuestion(question) {
   const companyResponses = `
-  My company name is Future ProfileZ,
     My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.
     My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.
     My company has a Google Review rating of 4.9.
@@ -102,24 +101,46 @@ function handleCompanyQuestion(question) {
 
   // Convert the companyResponses paragraph to lowercase for case-insensitive matching
   const lowercaseResponses = companyResponses.toLowerCase();
+  const lowercaseQuestion = question.toLowerCase();
 
   // Check if the question contains any company-related keywords
-  if (question.toLowerCase().includes("services")) {
-    const answer = getCompanyResponse(lowercaseResponses, "services");
-    return answer;
-  } else if (question.toLowerCase().includes("name")) {
+  if (lowercaseQuestion.includes("services")) {
+    const specificService = getServiceFromQuestion(lowercaseQuestion);
+    if (specificService) {
+      // If a specific service is found in the question, generate an AI response
+      const aiResponse = generateAIResponseForService(specificService);
+      return aiResponse;
+    } else {
+      // If the user's question is generic about services, return the entire list of services
+      return getCompanyResponse(lowercaseResponses, "services");
+    }
+  } else if (lowercaseQuestion.includes("name")) {
     const answer = getCompanyResponse(lowercaseResponses, "name");
     return answer;
-  } else if (question.toLowerCase().includes("about")) {
+  } else if (lowercaseQuestion.includes("about")) {
     const answer = getCompanyResponse(lowercaseResponses, "about");
     return answer;
-  } else if (question.toLowerCase().includes("review")) {
+  } else if (lowercaseQuestion.includes("review")) {
     const answer = getCompanyResponse(lowercaseResponses, "review");
     return answer;
   } else {
     // If the question is not recognized, return a default response
     return "I'm sorry, I don't have the specific information you are looking for.";
   }
+}
+
+// Helper function to extract a specific service name from the user's question
+function getServiceFromQuestion(question) {
+  const services = ['mobile', 'e-business', 'php', 'laravel', 'cakephp', 'zend', 'codeigniter', 'yii', 'custom php', 'php mysql'];
+  const matchingService = services.find((service) => question.includes(service));
+  return matchingService;
+}
+
+// Helper function to generate an AI response for a specific service
+function generateAIResponseForService(service) {
+  // You can use the AI to generate a response based on the specific service
+  // For demonstration purposes, we will provide a generic response here.
+  return `My company specializes in ${service} development. We have a team of experts who work on various projects related to ${service}. If you have any specific questions about ${service}, feel free to ask.`;
 }
 
 // Helper function to get the relevant response from the companyResponses paragraph
@@ -134,6 +155,7 @@ function getCompanyResponse(paragraph, keyword) {
   const endIndex = paragraph.indexOf('\n', startIndex);
   return paragraph.substring(startIndex, endIndex);
 }
+
 
 
 

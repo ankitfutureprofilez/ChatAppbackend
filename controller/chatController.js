@@ -91,7 +91,7 @@ function isWebCompanyRelatedQuestion(question) {
   const companyKeywords = ['Name', 'Services', 'location', "Review", "about"];
   return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword));
 }
-
+// Function to handle different company-related questions using specific responses
 function handleCompanyQuestion(question) {
   const companyResponses = {
     'name': "My company Name is Future Profilez.",
@@ -111,6 +111,7 @@ function handleCompanyQuestion(question) {
 
   return "I am not fielded this type of question.";
 }
+
 
 // exports.findAnswer = async (req, res) => {
 //   try {

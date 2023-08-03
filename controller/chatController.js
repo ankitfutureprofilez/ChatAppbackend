@@ -91,7 +91,6 @@ function isWebCompanyRelatedQuestion(question) {
   const companyKeywords = ["name", "services","about","review"]
   return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
 }
-
 function handleCompanyQuestion(question) {
   const companyResponses = `
     My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.
@@ -100,31 +99,37 @@ function handleCompanyQuestion(question) {
     Sure, I can provide some general information about my company. It is a web development company in Jaipur, India. My company works with PHP, Laravel, Shopify, Magento, and MERN Stack.
   `;
 
-  // Search for the question in the paragraph (ignoring case)
-  const paragraph = companyResponses.toLowerCase();
-  const lowercaseQuestion = question.toLowerCase();
+  // Convert the companyResponses paragraph to lowercase for case-insensitive matching
+  const lowercaseResponses = companyResponses.toLowerCase();
 
-  // Check if the question appears in the paragraph
-  if (paragraph.includes(lowercaseQuestion)) {
-    // If found, return the relevant part of the paragraph containing the answer
-    const startIndex = paragraph.indexOf(lowercaseQuestion);
-    const endIndex = paragraph.indexOf('\n', startIndex); // Find the end of the line
-    return companyResponses.substring(startIndex, endIndex);
+  // Check if the question contains any company-related keywords
+  if (question.toLowerCase().includes("services")) {
+    return getCompanyResponse(lowercaseResponses, "services");
+  } else if (question.toLowerCase().includes("name")) {
+    return getCompanyResponse(lowercaseResponses, "name");
+  } else if (question.toLowerCase().includes("about")) {
+    return getCompanyResponse(lowercaseResponses, "about");
+  } else if (question.toLowerCase().includes("review")) {
+    return getCompanyResponse(lowercaseResponses, "review");
   } else {
-    // If not found, check if the question is related to company information
-    if (
-      lowercaseQuestion.includes('services') ||
-      lowercaseQuestion.includes('name') ||
-      lowercaseQuestion.includes('about') ||
-      lowercaseQuestion.includes('review')
-    ) {
-      return "I'm sorry, I don't have the specific information you are looking for.";
-    } else {
-      // If the question is not recognized, return a default response
-      return "I am not fielded this type of question.";
-    }
+    // If the question is not recognized, return a default response
+    return "I'm sorry, I don't have the specific information you are looking for.";
   }
 }
+
+// Helper function to get the relevant response from the companyResponses paragraph
+function getCompanyResponse(paragraph, keyword) {
+  const startIndex = paragraph.indexOf(keyword.toLowerCase());
+  if (startIndex === -1) {
+    // If the keyword is not found, return the default response
+    return "I'm sorry, I don't have the specific information you are looking for.";
+  }
+
+  // Find the end of the line after the keyword
+  const endIndex = paragraph.indexOf('\n', startIndex);
+  return paragraph.substring(startIndex, endIndex);
+}
+
 
 
 

@@ -38,15 +38,23 @@ exports.findAnswer = async (req, res) => {
       });
       assistantAnswer = completion.data.choices[0].text;
     }
-    else if(iscompanyQuestion){
-      assistantAnswer = "We are a web development company specializing in creating innovative and user-friendly websites and applications."; 
-    }
     
     else {
       // If the question is not related to web development, reply with a default message
       assistantAnswer = "I am not fielded this type of question.";
     }
-
+    
+    if(iscompanyQuestion){
+      const completion = await openai.createCompletion({
+        model: 'text-ada-001',
+        prompt: userQuestion,
+        max_tokens: 150,
+      });
+      assistantAnswer = completion.data.choices[0].text; }
+      else {
+        // If the question is not related to web development, reply with a default message
+        assistantAnswer = "I am not fielded this type of question.";
+      }     
     // Save the user question and the assistant's answer to the MongoDB collection
     const savedEntry = await QuestionAnswer.create({
       question: userQuestion,

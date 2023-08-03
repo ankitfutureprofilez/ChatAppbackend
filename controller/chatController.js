@@ -37,7 +37,7 @@ exports.findAnswer = async (req, res) => {
         max_tokens: 150,
       });
       assistantAnswer = completion.data.choices[0].text;
-    } else if (isCompanyQuestion) {
+    } else if (iscompanyQuestion) {
       // Use AI-generated answer using the text-davinci-002 model for company-related questions
       const completion = await openai.createCompletion({
         model: 'text-ada-001',

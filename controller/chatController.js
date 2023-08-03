@@ -27,7 +27,6 @@ exports.findAnswer = async (req, res) => {
 
     // Check if the user's question is related to web development
     const isWebDevelopmentQuestion = isWebDevelopmentRelatedQuestion(userQuestion);
-    const isCompanyQuestion = isCompanyRelatedQuestion(userQuestion);
     let assistantAnswer;
     if (isWebDevelopmentQuestion) {
       // Use AI-generated answer using the text-davinci-002 model
@@ -38,10 +37,7 @@ exports.findAnswer = async (req, res) => {
       });
       assistantAnswer = completion.data.choices[0].text;
     }
-    else if (isCompanyQuestion) {
-      // Provide a custom response about your company
-      assistantAnswer = "We are a web development company specializing in creating innovative and user-friendly websites and applications.";
-    }
+    
     else {
       // If the question is not related to web development, reply with a default message
       assistantAnswer = "I am not fielded this type of question.";
@@ -72,18 +68,11 @@ exports.findAnswer = async (req, res) => {
 
 // Helper function to check if a question is related to web development
 function isWebDevelopmentRelatedQuestion(question) {
-  const webDevKeywords = ['web development', "React", "Node", "MERN", 'HTML', 'CSS', 'JavaScript', 'framework'];
+  const webDevKeywords = ['MEAN', "React", "Node", "MERN", 'HTML', 'CSS', 'JavaScript', 'framework'];
   return webDevKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
 }
 
 
-// Helper function to check if a question is related to your company
-function isCompanyRelatedQuestion(question) {
-  const companyKeywords = [" future profilez ",
-    " my company Services  Mobile,E-business,PHP,Laravel Development,CakePHP Development,Zend Development,CodeIgniter Development,Yii Development,Custom PHP Development,PHP MySQL Development",
-    "my Company Google Review 4.9 in all time my company Location Office No. D-105B, G-4, Golden OAK-1, Devi Marg,it is a web development company in jaipur india.my Company Working Time is 9:30 AM  to 6:30 PM  Bani Park, Jaipur, Rajasthan 302016."];
-  return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
-}
 
 
 

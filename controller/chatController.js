@@ -14,7 +14,6 @@ const configuration = new Configuration({
 
 
 
-
 //console.log("configuration",configuration)
 const openai = new OpenAIApi(configuration);
 
@@ -22,48 +21,38 @@ const openai = new OpenAIApi(configuration);
 
 
 exports.findAnswer = async (req, res) => {
+
   try {
     const userQuestion = req.body.question;
+    const fields = ['React.js', 'Node.js', 'PHP', 'react js']; // Specify the relevant fields
+    const companyDetails = "My company is future profilez and it is a web development company in jaipur india."; // Pass your company details in the request body
 
-    if (!userQuestion) {
+    if (!userQuestion || !companyDetails) {
       return res.status(400).json({
-        msg: 'Bad Request: Missing question field in the request body.',
+        msg: 'Bad Request: Missing question or companyDetails field in the request body.',
         status: 400,
       });
     }
+    const prompt = `
+Prompt: You are an AI assistant for a web development company. Read belows questions.
+Q1: My company name is future profilez.
+Q2: Our location is in Bani Park jaipur india. 
+Q3: we works on all web development technologies such as react js, node js. 
+Please provide answer based on above information given. If my query not matches with above then give relevent answer for that query based on my business and query is not related to web develpment then deined to provide any information.
+My question is "${userQuestion}"
+`;
 
-    // Check if the user's question is related to web development
-    const isWebDevelopmentQuestion = isWebDevelopmentRelatedQuestion(userQuestion);
-    const iscompanyQuestion = isWebCompanyRelatedQuestion(userQuestion)
-    let assistantAnswer;
-    if (isWebDevelopmentQuestion) {
-      // Use AI-generated answer using the text-davinci-002 model
-      const completion = await openai.createCompletion({
-        model: 'text-ada-001',
-        prompt: userQuestion,
-        max_tokens: 150,
-      });
-      assistantAnswer = completion.data.choices[0].text;
-    } else if (iscompanyQuestion) {
-      // Use AI-generated answer using the text-davinci-002 model for company-related questions
-      assistantAnswer = handleCompanyQuestion(userQuestion);
-    }
-
-    else {
-      // If the question is not related to web development or company, reply with a default message
-      assistantAnswer = "I am not fielded this type of question.";
-    }
-
-
-
-
-    // Save the user question and the assistant's answer to the MongoDB collection
+    const completion = await openai.createCompletion({
+      model: 'text-davinci-002',
+      prompt: prompt,
+      max_tokens: 150
+    });
+    const assistantAnswer = completion.data.choices[0].text;
     const savedEntry = await QuestionAnswer.create({
       question: userQuestion,
       answer: assistantAnswer,
     });
 
-    // Send the answer as a response to the client
     res.json({
       status: 200,
       data: assistantAnswer,
@@ -79,142 +68,6 @@ exports.findAnswer = async (req, res) => {
     });
   }
 };
-
-// Helper function to check if a question is related to web development
-function isWebDevelopmentRelatedQuestion(question) {
-  const webDevKeywords = ['MEAN', "React", "Node", "MERN", 'HTML', 'CSS', 'JavaScript', 'framework'];
-  return webDevKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
-}
-
-
-function isWebCompanyRelatedQuestion(question) {
-  const companyKeywords = ["name", "services", "about", "review"]
-  return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
-}
-function handleCompanyQuestion(question) {
-  const companyResponses = `
-  My Company Name Is Future ProfileZ
-    My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.
-    My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.
-    My company has a Google Review rating of 4.9.
-    Sure, I can provide some general information about my company. It is a web development company in Jaipur, India. My company works with PHP, Laravel, Shopify, Magento, and MERN Stack.
-  `;
-
-  // Convert the companyResponses paragraph to lowercase for case-insensitive matching
-  const lowercaseResponses = companyResponses.toLowerCase();
-  const lowercaseQuestion = question.toLowerCase();
-
-  // Check if the question contains any company-related keywords
-  if (lowercaseQuestion.includes("services")) {
-    const specificService = getServiceFromQuestion(lowercaseQuestion);
-    if (specificService) {
-      // If a specific service is found in the question, generate an AI response
-      const aiResponse = generateAIResponseForService(specificService);
-      return aiResponse;
-    } else {
-      // If the user's question is generic about services, return the entire list of services
-      return getCompanyResponse(lowercaseResponses, "services");
-    }
-  } else if (lowercaseQuestion.includes("name")) {
-    const answer = getCompanyResponse(lowercaseResponses, "name");
-    return answer;
-  } else if (lowercaseQuestion.includes("about")) {
-    const answer = getCompanyResponse(lowercaseResponses, "about");
-    return answer;
-  } else if (lowercaseQuestion.includes("review")) {
-    const answer = getCompanyResponse(lowercaseResponses, "review");
-    return answer;
-  } else {
-    // If the question is not recognized, return a default response
-    return "I'm sorry, I don't have the specific information you are looking for.";
-  }
-}
-
-// Helper function to extract a specific service name from the user's question
-function getServiceFromQuestion(question) {
-  const services = ['mobile', 'e-business', 'php', 'laravel', 'cakephp', 'zend', 'codeigniter', 'yii', 'custom php', 'php mysql'];
-  const matchingService = services.find((service) => question.includes(service));
-  return matchingService;
-}
-
-// Helper function to generate an AI response for a specific service
-function generateAIResponseForService(service) {
-  // You can use the AI to generate a response based on the specific service
-  // For demonstration purposes, we will provide a generic response here.
-  return `My company specializes in ${service} development. We have a team of experts who work on various projects related to ${service}. If you have any specific questions about ${service}, feel free to ask.`;
-}
-
-// Helper function to get the relevant response from the companyResponses paragraph
-function getCompanyResponse(paragraph, keyword) {
-  const startIndex = paragraph.indexOf(keyword.toLowerCase());
-  if (startIndex === -1) {
-    // If the keyword is not found, return the default response
-    return "I'm sorry, I don't have the specific information you are looking for.";
-  }
-
-  // Find the end of the line after the keyword
-  const endIndex = paragraph.indexOf('\n', startIndex);
-  return paragraph.substring(startIndex, endIndex);
-}
-
-
-
-
-
-
-
-// exports.findAnswer = async (req, res) => {
-//   try {
-//     const userQuestion = req.body.question;
-//     const fields = ['React.js', 'Node.js', 'PHP', 'react js']; // Specify the relevant fields
-//     const companyDetails = "My company name future profilez .my company owner name Vishal ,  Company Stablished in 2005 .  it is a web development company in jaipur india.my Company Working Time is 9:30 AM  to 6:30 PM .My Company work it PHP, laravel, shopify, mangto and Mern Stack.my Company Google Review 4.9 in all time . my company provide multiple Services  Mobile, E - business,   PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development  my company Location is  Office No.D - 105B, G - 4, Golden OAK - 1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016. "; // Pass your company details in the request body
-//     if (!userQuestion || !companyDetails) {                      
-//       return res.status(400).json({                
-//         msg: 'Bad Request: Missing question or companyDetails field in the request body.',
-//         status: 400,
-//       });   
-//     }  
-
-//     // Combine all the fields, company details, and the user's question in the prompt
-//     const prompt = `${companyDetails} ${fields.map((field) => `In the field of ${field},`).join(' ')} ${userQuestion}`;
-
-//     const completion = await openai.createCompletion({
-//       model: 'text-davinci-002',
-//       prompt: prompt
-//     });
-
-//     const assistantAnswer = completion.data.choices[0].text;
-
-//     // Filter the answer to ensure it relates to one of the specified fields
-//     const relevantField = fields.find((field) => assistantAnswer.toLowerCase().includes(field.toLowerCase()));
-//     if (!relevantField) {
-//       return res.status(200).json({
-//         data: "Sorry, I couldn't find a relevant answer in the specified fields.",
-//         msg: 'Successfully Retrieved Answer',
-//       });
-//     }
-
-//     const savedEntry = await QuestionAnswer.create({
-//       question: userQuestion,
-//       answer: assistantAnswer,
-//       field: relevantField, // Save the specific field along with the question and answer
-//     });
-
-//     res.json({
-//       status: 200,
-//       data: assistantAnswer,
-//       msg: 'Successfully Retrieved Answer',
-//       savedEntry: savedEntry, // Optional: Send the saved database entry back in the response
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     res.json({
-//       err: err,
-//       msg: 'Error Detected',
-//       status: 400,
-//     });
-//   }
-// };
 
 
 exports.conversion = (async (req, res) => {

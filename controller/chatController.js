@@ -19,10 +19,86 @@ const configuration = new Configuration({
 //console.log("configuration",configuration)
 const openai = new OpenAIApi(configuration);
 console.log("openai", openai)
+// exports.findAnswer = async (req, res) => {
+//   try {
+//     const userQuestion = req.body.question;
+//     // console.log("userQuestion", userQuestion)
+//     if (!userQuestion) {
+//       return res.status(400).json({
+//         msg: 'Bad Request: Missing question field in the request body.',
+//         status: 400,
+//       });
+//     }
+
+//     // Check if the user's question is related to web development
+//     const isWebDevelopmentQuestion = isWebDevelopmentRelatedQuestion(userQuestion);
+
+//     let assistantAnswer;
+//     if (isWebDevelopmentQuestion) {
+//       // Predefined answers for specific web development-related questions
+//       if (userQuestion.includes('HTML' || "CSS")) {
+//         assistantAnswer = 'HTML stands for HyperText Markup Language... ' || 'CSS stands for Cascading Style Sheets...';
+//       } else if (userQuestion.includes('backend')) {
+//         assistantAnswer = 'CSS stands for Cascading Style Sheets...';
+//       } else if (userQuestion.includes('JavaScript')) {
+//         assistantAnswer = 'JavaScript is a programming language commonly used for web development...';
+//       } 
+//       else if(userQuestion.includes('framework')){
+//         assistantAnswer="Laravel is a free and open-source PHP web framework, created by Taylor Otwell and intended for the development of web applications following the model view controller architectural pattern and based on Symfony";
+//       }
+//       else {
+//         // If the question is related to web development but not predefined, use AI-generated answer
+//         const completion = await openai.createCompletion({
+//           model: 'text-davinci-001',
+         
+//         prompt: userQuestion,
+//         });
+//         assistantAnswer = completion.data.choices[0].text;
+//       }
+//     } else {
+//       // If the question is not related to web development, reply with a default message
+//       assistantAnswer = "I am not fielded this type of question.";
+//     }
+//     const completion = await openai.createCompletion({
+//       model: 'text-davinci-001',
+     
+//     prompt: userQuestion,
+//     });
+//     assistantAnswer = completion.data.choices[0].text;
+//     // Save the user question and the assistant's answer to the MongoDB collection
+//     const savedEntry = await QuestionAnswer.create({
+//       question: userQuestion,
+//       answer: assistantAnswer,
+//     });
+//     // console.log("savedEntry", savedEntry)
+//     // Send the answer as a response to the client
+//     res.json({
+//       status: 200,
+//       data: assistantAnswer,
+//       msg: 'Successfully Retrieved Answer',
+//       savedEntry: savedEntry, // Optional: Send the saved database entry back in the response
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     res.json({
+//       err: err,
+//       msg: 'Error Detected',
+//       status: 400,
+//     });
+//   }
+// };
+
+// // Helper function to check if a question is related to web development
+// function isWebDevelopmentRelatedQuestion(question) {
+//   // Implement your logic to determine if the question is related to web development
+//   // For example, you can check for keywords related to web development in the question
+//   const webDevKeywords = ['web development', 'frontend', 'backend', 'HTML', 'CSS', 'JavaScript', 'framework'];
+//   return webDevKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
+// }
 exports.findAnswer = async (req, res) => {
   try {
     const userQuestion = req.body.question;
-    // console.log("userQuestion", userQuestion)
+   // console.log("userQuestion", userQuestion)
     if (!userQuestion) {
       return res.status(400).json({
         msg: 'Bad Request: Missing question field in the request body.',
@@ -30,35 +106,14 @@ exports.findAnswer = async (req, res) => {
       });
     }
 
-    // Check if the user's question is related to web development
-    const isWebDevelopmentQuestion = isWebDevelopmentRelatedQuestion(userQuestion);
-
-    let assistantAnswer;
-    if (isWebDevelopmentQuestion) {
-      // Predefined answers for specific web development-related questions
-      if (userQuestion.includes('HTML' || "CSS")) {
-        assistantAnswer = 'HTML stands for HyperText Markup Language... ' || 'CSS stands for Cascading Style Sheets...';
-      } else if (userQuestion.includes('backend')) {
-        assistantAnswer = 'CSS stands for Cascading Style Sheets...';
-      } else if (userQuestion.includes('JavaScript')) {
-        assistantAnswer = 'JavaScript is a programming language commonly used for web development...';
-      } 
-      else if(userQuestion.includes('framework')){
-        assistantAnswer="Laravel is a free and open-source PHP web framework, created by Taylor Otwell and intended for the development of web applications following the model view controller architectural pattern and based on Symfony";
-      }
-      else {
-        // If the question is related to web development but not predefined, use AI-generated answer
-        const completion = await openai.createCompletion({
-          model: 'text-davinci-001',
-         
-        prompt: userQuestion,
-        });
-        assistantAnswer = completion.data.choices[0].text;
-      }
-    } else {
-      // If the question is not related to web development, reply with a default message
-      assistantAnswer = "I am not fielded this type of question.";
-    }
+    // Generate a response from OpenAI
+    const completion = await openai.createCompletion({
+      model: 'text-davinci-001',
+      prompt: userQuestion,
+    });
+   //console.log("completion", completion)
+    const assistantAnswer = completion.data.choices[0].text;
+    //console.log("assistantAnswer", assistantAnswer)
 
     // Save the user question and the assistant's answer to the MongoDB collection
     const savedEntry = await QuestionAnswer.create({
@@ -82,16 +137,6 @@ exports.findAnswer = async (req, res) => {
     });
   }
 };
-
-// Helper function to check if a question is related to web development
-function isWebDevelopmentRelatedQuestion(question) {
-  // Implement your logic to determine if the question is related to web development
-  // For example, you can check for keywords related to web development in the question
-  const webDevKeywords = ['web development', 'frontend', 'backend', 'HTML', 'CSS', 'JavaScript', 'framework'];
-  return webDevKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
-}
-const questionAnswering = pipeline('question-answering', { model: 'distilbert-base-cased-distilled-squad' });
-
 
 exports.conversion = (async (req, res) => {
   try {

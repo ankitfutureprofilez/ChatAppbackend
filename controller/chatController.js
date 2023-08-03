@@ -2,6 +2,7 @@ const Chat = require('../models/Messages')
 const user = require('../models/Users')
 const Conversation = require("../models/Converstion")
 const io = require('socket.io')(); // Don't need this since io is initialized in the server file
+const { pipeline } = require('@huggingface/transformers');
 const QuestionAnswer = require('../models/OpenAi')
 require('dotenv').config();
 
@@ -17,7 +18,7 @@ const configuration = new Configuration({
 
 //console.log("configuration",configuration)
 const openai = new OpenAIApi(configuration);
-//console.log("openai", openai)
+console.log("openai", openai)
 exports.findAnswer = async (req, res) => {
   try {
     const userQuestion = req.body.question;
@@ -45,12 +46,12 @@ exports.findAnswer = async (req, res) => {
       else if(userQuestion.includes('framework')){
         assistantAnswer="Laravel is a free and open-source PHP web framework, created by Taylor Otwell and intended for the development of web applications following the model view controller architectural pattern and based on Symfony";
       }
-      
       else {
         // If the question is related to web development but not predefined, use AI-generated answer
         const completion = await openai.createCompletion({
           model: 'text-davinci-001',
-          prompt: userQuestion,
+         
+        prompt: userQuestion,
         });
         assistantAnswer = completion.data.choices[0].text;
       }
@@ -89,7 +90,7 @@ function isWebDevelopmentRelatedQuestion(question) {
   const webDevKeywords = ['web development', 'frontend', 'backend', 'HTML', 'CSS', 'JavaScript', 'framework'];
   return webDevKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
 }
-
+const questionAnswering = pipeline('question-answering', { model: 'distilbert-base-cased-distilled-squad' });
 
 
 exports.conversion = (async (req, res) => {

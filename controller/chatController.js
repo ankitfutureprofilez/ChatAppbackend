@@ -12,7 +12,6 @@ const configuration = new Configuration({
   apiKey: ApiKey,
 });
 
-
 //console.log("configuration",configuration)
 const openai = new OpenAIApi(configuration);
 exports.findAnswer = async (req, res) => {

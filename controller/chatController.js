@@ -18,24 +18,25 @@ const openai = new OpenAIApi(configuration);
 exports.findAnswer = async (req, res) => {
   try {
     const userQuestion = req.body.question;
-    const fields = ['React.js', 'Node.js', 'PHP']; // Specify the relevant fields
+    const fields = ['React.js', 'Node.js', 'PHP', 'react js']; // Specify the relevant fields
+    const companyDetails = "My company is future profilez and it is a web development company in jaipur india."; // Pass your company details in the request body
 
-    if (!userQuestion) {
+    if (!userQuestion || !companyDetails) {
       return res.status(400).json({
-        msg: 'Bad Request: Missing question field in the request body.',
+        msg: 'Bad Request: Missing question or companyDetails field in the request body.',
         status: 400,
       });
     }
 
-    // Combine all the fields in the prompt
-    const prompt = fields.map((field) => `In the field of ${field},`).join(' ') + ` ${userQuestion}`;
+    // Combine all the fields, company details, and the user's question in the prompt
+    const prompt = `${companyDetails} ${fields.map((field) => `In the field of ${field},`).join(' ')} ${userQuestion}`;
 
     const completion = await openai.createCompletion({
       model: 'text-davinci-001',
       prompt: prompt,
-      max_tokens:150,
-    });
-
+      max_tokens:150
+    }); 
+ 
     const assistantAnswer = completion.data.choices[0].text;
 
     // Filter the answer to ensure it relates to one of the specified fields
@@ -68,6 +69,7 @@ exports.findAnswer = async (req, res) => {
     });
   }
 };
+
 
 exports.conversion = (async (req, res) => {
   try {

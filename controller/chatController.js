@@ -104,6 +104,8 @@ function handleCompanyQuestion(question) {
   // Search for the question in the paragraph (ignoring case)
   const paragraph = companyResponses.toLowerCase();
   const lowercaseQuestion = question.toLowerCase();
+  console.log("paragraph",paragraph)
+  console.log("lowercaseQuestion",lowercaseQuestion)
 
   // Check if the question appears in the paragraph
   if (paragraph.includes(lowercaseQuestion)) {

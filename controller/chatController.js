@@ -37,7 +37,7 @@ exports.findAnswer = async (req, res) => {
       // Predefined answers for specific web development-related questions
       if (userQuestion.includes('HTML' || "CSS")) {
         assistantAnswer = 'HTML stands for HyperText Markup Language... ' || 'CSS stands for Cascading Style Sheets...';
-      } else if (userQuestion.includes('CSS')) {
+      } else if (userQuestion.includes('backend')) {
         assistantAnswer = 'CSS stands for Cascading Style Sheets...';
       } else if (userQuestion.includes('JavaScript')) {
         assistantAnswer = 'JavaScript is a programming language commonly used for web development...';

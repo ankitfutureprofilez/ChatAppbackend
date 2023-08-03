@@ -10,14 +10,14 @@ dotenv.config({ path: 'config.env' });
 const app = express();
 
 // app.use(cors());
-app.use(cors({
-    origin: '*',
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  }));
-const server = http.createServer(app);
 
 const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)
+app.use(cors({
+    origin: URL,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }));
+const server = http.createServer(app);
 const mongoose = require("mongoose")
 
 const bodyParser = require('body-parser')

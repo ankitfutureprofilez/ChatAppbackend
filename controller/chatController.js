@@ -79,10 +79,14 @@ function isWebDevelopmentRelatedQuestion(question) {
 }
 
 
-
 function isWebCompanyRelatedQuestion(question) {
-  const companyKeywords = ['company', 'services', 'location'];
-  return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword));
+  const companyPhrases = [
+    "my company name is future ProfileZ ",
+    "company services PHP,Laravel Development,CakePHP Development,Zend Development,CodeIgniter Development,Yii Development,Custom PHP Development,PHP MySQL Development",
+    "company location  Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016",
+    // Add more specific phrases related to a company if needed
+  ];
+  return companyPhrases.some((phrase) => question.toLowerCase().includes(phrase));
 }
 
 

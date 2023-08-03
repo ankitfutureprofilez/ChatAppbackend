@@ -29,7 +29,7 @@ exports.findAnswer = async (req, res) => {
     const isWebDevelopmentQuestion = isWebDevelopmentRelatedQuestion(userQuestion);
     const iscompanyQuestion = isWebCompanyRelatedQuestion(userQuestion)
     let assistantAnswer;
-    if (isWebDevelopmentQuestion || iscompanyQuestion) {
+    if (isWebDevelopmentQuestion ) {
       // Use AI-generated answer using the text-davinci-002 model
       const completion = await openai.createCompletion({
         model: 'text-ada-001',
@@ -37,6 +37,9 @@ exports.findAnswer = async (req, res) => {
         max_tokens: 150,
       });
       assistantAnswer = completion.data.choices[0].text;
+    }
+    else if(iscompanyQuestion){
+      assistantAnswer = "We are a web development company specializing in creating innovative and user-friendly websites and applications."; 
     }
     
     else {

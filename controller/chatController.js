@@ -12,8 +12,15 @@ const configuration = new Configuration({
   apiKey: ApiKey,
 });
 
+
+
+
 //console.log("configuration",configuration)
 const openai = new OpenAIApi(configuration);
+
+
+
+
 exports.findAnswer = async (req, res) => {
   try {
     const userQuestion = req.body.question;
@@ -39,12 +46,7 @@ exports.findAnswer = async (req, res) => {
       assistantAnswer = completion.data.choices[0].text;
     } else if (iscompanyQuestion) {
       // Use AI-generated answer using the text-davinci-002 model for company-related questions
-      assistantAnswer = "."
-      || "My company Name is future profilez"|| 
-       " my company  about I can provide some general information about companies. it is a web development company in jaipur india.my Company Working Time is 9:30 AM  to 6:30 PM .My Company work it PHP,laravel,shopify,mangto and Mern Stack" ||
-       " my Company Google Review 4.9 in all time "||
-       " my company Services  Mobile,E-business,PHP,Laravel Development,CakePHP Development Zend Development,CodeIgniter Development,Yii Development,Custom PHP Development,PHPMySQL Development" ||
-       "my company Location Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016";
+      assistantAnswer = handleCompanyQuestion(userQuestion);
     }
 
     else {
@@ -52,7 +54,7 @@ exports.findAnswer = async (req, res) => {
       assistantAnswer = "I am not fielded this type of question.";
     }
 
-   
+
 
 
     // Save the user question and the assistant's answer to the MongoDB collection
@@ -86,11 +88,29 @@ function isWebDevelopmentRelatedQuestion(question) {
 
 
 function isWebCompanyRelatedQuestion(question) {
-  const companyKeywords = ['Name', 'Services', 'location',"Review","about"];
+  const companyKeywords = ['Name', 'Services', 'location', "Review", "about"];
   return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword));
 }
 
+function handleCompanyQuestion(question) {
+  const companyResponses = {
+    'name': "My company Name is Future Profilez.",
+    'services': "My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.",
+    'location': "My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.",
+    'review': "My company has a Google Review rating of 4.9.",
+    'about': "Sure, I can provide some general information about my company. It is a web development company in Jaipur, India. My company works with PHP, Laravel, Shopify, Magento, and MERN Stack."
+  };
 
+  const keywords = Object.keys(companyResponses);
+
+  for (const keyword of keywords) {
+    if (question.toLowerCase().includes(keyword)) {
+      return companyResponses[keyword];
+    }
+  }
+
+  return "I am not fielded this type of question.";
+}
 
 // exports.findAnswer = async (req, res) => {
 //   try {

@@ -88,7 +88,7 @@ function isWebDevelopmentRelatedQuestion(question) {
 
 
 function isWebCompanyRelatedQuestion(question) {
-  const companyKeywords = ["Name", "Services","About","review"]
+  const companyKeywords = ["name", "services","about","review"]
   return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
 }
 

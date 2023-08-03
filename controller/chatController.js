@@ -41,7 +41,12 @@ exports.findAnswer = async (req, res) => {
         assistantAnswer = 'CSS stands for Cascading Style Sheets...';
       } else if (userQuestion.includes('JavaScript')) {
         assistantAnswer = 'JavaScript is a programming language commonly used for web development...';
-      } else {
+      } 
+      else if(userQuestion.includes('framework')){
+        assistantAnswer="Laravel is a free and open-source PHP web framework, created by Taylor Otwell and intended for the development of web applications following the model view controller architectural pattern and based on Symfony";
+      }
+      
+      else {
         // If the question is related to web development but not predefined, use AI-generated answer
         const completion = await openai.createCompletion({
           model: 'text-davinci-001',

@@ -2,7 +2,6 @@ const Chat = require('../models/Messages')
 const user = require('../models/Users')
 const Conversation = require("../models/Converstion")
 const io = require('socket.io')(); // Don't need this since io is initialized in the server file
-const { pipeline } = require('@huggingface/transformers');
 const QuestionAnswer = require('../models/OpenAi')
 require('dotenv').config();
 
@@ -18,7 +17,7 @@ const configuration = new Configuration({
 
 //console.log("configuration",configuration)
 const openai = new OpenAIApi(configuration);
-console.log("openai", openai)
+//console.log("openai", openai)
 // exports.findAnswer = async (req, res) => {
 //   try {
 //     const userQuestion = req.body.question;

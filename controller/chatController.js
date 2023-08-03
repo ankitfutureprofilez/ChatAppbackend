@@ -14,12 +14,14 @@ const configuration = new Configuration({
 
 //console.log("configuration",configuration)
 const openai = new OpenAIApi(configuration);
+
+
+
 exports.findAnswer = async (req, res) => {
   try {
     const userQuestion = req.body.question;
     const fields = ['React.js', 'Node.js', 'PHP', 'react js']; // Specify the relevant fields
-    const companyDetails = "My company is future profilez and it is a web development company in jaipur india."; // Pass your company details in the request body
-
+    const companyDetails = "My company name future profilez .my company owner name Vishal ,  Company Stablished in 2005 .  it is a web development company in jaipur india.my Company Working Time is 9:30 AM  to 6:30 PM .My Company work it PHP, laravel, shopify, mangto and Mern Stack.my Company Google Review 4.9 in all time . my company provide multiple Services  Mobile, E - business,   PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development  my company Location is  Office No.D - 105B, G - 4, Golden OAK - 1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016. "; // Pass your company details in the request body
     if (!userQuestion || !companyDetails) {
       return res.status(400).json({
         msg: 'Bad Request: Missing question or companyDetails field in the request body.',
@@ -31,11 +33,10 @@ exports.findAnswer = async (req, res) => {
     const prompt = `${companyDetails} ${fields.map((field) => `In the field of ${field},`).join(' ')} ${userQuestion}`;
 
     const completion = await openai.createCompletion({
-      model: 'text-davinci-001',
-      prompt: prompt,
-      max_tokens:150
-    }); 
- 
+      model: 'text-davinci-002',
+      prompt: prompt
+    });
+
     const assistantAnswer = completion.data.choices[0].text;
 
     // Filter the answer to ensure it relates to one of the specified fields
@@ -128,7 +129,7 @@ exports.sendMessage = async (req, res) => {
       message: req.body.message,
       userId: senderId,
       receiveId: receiverId,
-      
+
     });
     const savedMessage = await chatMessage.save();
 
@@ -145,7 +146,7 @@ exports.sendMessage = async (req, res) => {
         uid: newUid,
       });
       const newConversation = await conversation.save();
-    //  console.log("newConversation", newConversation);
+      //  console.log("newConversation", newConversation);
     }
 
     // Emit the message to the recipient's socket
@@ -156,7 +157,7 @@ exports.sendMessage = async (req, res) => {
       status: true,
       success: true,
       message: savedMessage,
-  
+
     });
   } catch (error) {
     console.log(error);

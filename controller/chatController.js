@@ -66,7 +66,7 @@ exports.findAnswer = async (req, res) => {
 
 // Helper function to check if a question is related to web development
 function isWebDevelopmentRelatedQuestion(question) {
-  const webDevKeywords = ['web development', 'frontend', 'backend', 'HTML', 'CSS', 'JavaScript', 'framework'];
+  const webDevKeywords = ['web development', "React","Node","MERN" ,'HTML', 'CSS', 'JavaScript', 'framework'];
   return webDevKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
 } 
 

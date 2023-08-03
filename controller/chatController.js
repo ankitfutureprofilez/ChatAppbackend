@@ -32,8 +32,9 @@ exports.findAnswer = async (req, res) => {
     if (isWebDevelopmentQuestion) {
       // Use AI-generated answer using the text-davinci-002 model
       const completion = await openai.createCompletion({
-        model: 'text-davinci-002',
+        model: 'text-davinci-001',
         prompt: userQuestion,
+        max_tokens: 150,
       });
       assistantAnswer = completion.data.choices[0].text;
     } else {

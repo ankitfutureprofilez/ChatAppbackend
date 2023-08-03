@@ -88,8 +88,8 @@ function isWebDevelopmentRelatedQuestion(question) {
 
 
 function isWebCompanyRelatedQuestion(question) {
-  const companyKeywords = ['Name', 'Services', 'location', "Review", "about"];
-  return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword));
+  const companyKeywords = /\b(company|services|location|review|about)\b/i;
+  return companyKeywords.test(question);
 }
 // Function to handle different company-related questions using specific responses
 function handleCompanyQuestion(question) {

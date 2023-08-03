@@ -32,13 +32,20 @@ exports.findAnswer = async (req, res) => {
     let assistantAnswer;
 
     if (isWebDevelopmentQuestion) {
-      // If the question is related to web development, use AI-generated answer
-      const completion = await openai.complete({
-        engine: 'text-davinci-001',
-        prompt: userQuestion,
-        maxTokens: 150, // Adjust the maxTokens based on how long you want the answer to be
-      });
-      assistantAnswer = completion.data.choices[0].text;
+      try {
+        // If the question is related to web development, use AI-generated answer
+        const completion = await openai.Completion.create({
+          engine: 'text-davinci-001',
+          prompt: userQuestion,
+          max_tokens: 150, // Adjust the max_tokens based on how long you want the answer to be
+        });
+        assistantAnswer = completion.data.choices[0].text;
+      } catch (err) {
+        console.log(err);
+        // Handle any error that occurs during AI completion
+        // You may want to use a predefined fallback response in case of errors
+        assistantAnswer = "I encountered an error while processing the answer.";
+      }
     } else {
       // If the question is not related to web development, reply with a default message
       assistantAnswer = "I am not fielded this type of question.";
@@ -73,7 +80,7 @@ exports.findAnswer = async (req, res) => {
 function isWebDevelopmentRelatedQuestion(question) {
   // Implement your logic to determine if the question is related to web development
   // For example, you can check for keywords related to web development in the question
-  const webDevKeywords = ['web development', 'frontend', 'backend', 'HTML', 'CSS', 'JavaScript', 'framework'];
+  const webDevKeywords = ['web development', 'frontend', 'backend', 'HTML', 'CSS',"mern", 'JavaScript', 'framework'];
   return webDevKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
 }
 

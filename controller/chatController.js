@@ -15,6 +15,7 @@ const configuration = new Configuration({
 //console.log("configuration",configuration)
 const openai = new OpenAIApi(configuration);
 exports.findAnswer = async (req, res) => {
+
   try {
     const userQuestion = req.body.question;
     const fields = ['React.js', 'Node.js', 'PHP', 'react js']; // Specify the relevant fields
@@ -26,30 +27,27 @@ exports.findAnswer = async (req, res) => {
         status: 400,
       });
     }
+    const prompt = `
+    Prompt: You are an AI assistant for a web development company. Read belows questions.
 
-    // Combine all the fields, company details, and the user's question in the prompt
-    const prompt = `${companyDetails} ${fields.map((field) => `In the field of ${field},`).join(' ')} ${userQuestion}`;
+    Q1: My company name is future profilez.
+    Q2: Our location is in Bani Park jaipur india. 
+    Q3: we works on all web development technologies such as react js, node js. 
+
+    Please provide answer based on above information given. If my query not matches with above then give relevent answer for that query based on my business and query is not related to web develpment then deined to provide any information.
+    My question is "${userQuestion}"
+
+    `;
 
     const completion = await openai.createCompletion({
-      model: 'text-davinci-001',
+      model: 'text-davinci-002',
       prompt: prompt,
       max_tokens:150
     });  
     const assistantAnswer = completion.data.choices[0].text;
-
-    // Filter the answer to ensure it relates to one of the specified fields
-    const relevantField = fields.find((field) => assistantAnswer.toLowerCase().includes(field.toLowerCase()));
-    if (!relevantField) {
-      return res.status(200).json({
-        data: "Sorry, I couldn't find a relevant answer in the specified fields.",
-        msg: 'Successfully Retrieved Answer',
-      });
-    }
-
     const savedEntry = await QuestionAnswer.create({
       question: userQuestion,
       answer: assistantAnswer,
-      field: relevantField, // Save the specific field along with the question and answer
     });
 
     res.json({
@@ -67,7 +65,6 @@ exports.findAnswer = async (req, res) => {
     });
   }
 };
-
 
 exports.conversion = (async (req, res) => {
   try {

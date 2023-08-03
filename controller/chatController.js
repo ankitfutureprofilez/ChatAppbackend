@@ -39,13 +39,10 @@ exports.findAnswer = async (req, res) => {
       assistantAnswer = completion.data.choices[0].text;
     } else if (iscompanyQuestion) {
       // Use AI-generated answer using the text-davinci-002 model for company-related questions
-      const completion = await openai.createCompletion({
-        model: 'text-ada-001',
-        prompt: userQuestion,
-        max_tokens: 150,
-      });
-      assistantAnswer = completion.data.choices[0].text;
-    } else {
+      assistantAnswer = "Sure, I can provide some general information about companies.";
+    } 
+     
+    else {
       // If the question is not related to web development or company, reply with a default message
       assistantAnswer = "I am not fielded this type of question.";
     }  

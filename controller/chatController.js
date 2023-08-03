@@ -92,20 +92,17 @@ function isWebCompanyRelatedQuestion(question) {
   return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
 }
 
-
 function handleCompanyQuestion(question) {
   const companyResponses = `
-  My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.
-  My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.
-  My company has a Google Review rating of 4.9.
-  Sure, I can provide some general information about my company. It is a web development company in Jaipur, India. My company works with PHP, Laravel, Shopify, Magento, and MERN Stack.
-`;
+    My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.
+    My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.
+    My company has a Google Review rating of 4.9.
+    Sure, I can provide some general information about my company. It is a web development company in Jaipur, India. My company works with PHP, Laravel, Shopify, Magento, and MERN Stack.
+  `;
 
   // Search for the question in the paragraph (ignoring case)
   const paragraph = companyResponses.toLowerCase();
   const lowercaseQuestion = question.toLowerCase();
-  console.log("paragraph",paragraph)
-  console.log("lowercaseQuestion",lowercaseQuestion)
 
   // Check if the question appears in the paragraph
   if (paragraph.includes(lowercaseQuestion)) {
@@ -114,10 +111,21 @@ function handleCompanyQuestion(question) {
     const endIndex = paragraph.indexOf('\n', startIndex); // Find the end of the line
     return companyResponses.substring(startIndex, endIndex);
   } else {
-    // If not found, return a default response
-    return "I'm sorry, I don't have the specific information you are looking for.";
+    // If not found, check if the question is related to company information
+    if (
+      lowercaseQuestion.includes('services') ||
+      lowercaseQuestion.includes('name') ||
+      lowercaseQuestion.includes('about') ||
+      lowercaseQuestion.includes('review')
+    ) {
+      return "I'm sorry, I don't have the specific information you are looking for.";
+    } else {
+      // If the question is not recognized, return a default response
+      return "I am not fielded this type of question.";
+    }
   }
 }
+
 
 
 

@@ -88,11 +88,12 @@ function isWebDevelopmentRelatedQuestion(question) {
 
 
 function isWebCompanyRelatedQuestion(question) {
-  const companyKeywords = ["name", "services","about","review"]
+  const companyKeywords = ["name", "services", "about", "review"]
   return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
 }
 function handleCompanyQuestion(question) {
   const companyResponses = `
+  My company name is future profileZ 
     My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.
     My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.
     My company has a Google Review rating of 4.9.

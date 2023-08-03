@@ -14,11 +14,10 @@ const configuration = new Configuration({
 
 //console.log("configuration",configuration)
 const openai = new OpenAIApi(configuration);
-
-
 exports.findAnswer = async (req, res) => {
   try {
     const userQuestion = req.body.question;
+    
     if (!userQuestion) {
       return res.status(400).json({
         msg: 'Bad Request: Missing question field in the request body.',
@@ -30,22 +29,13 @@ exports.findAnswer = async (req, res) => {
     const isWebDevelopmentQuestion = isWebDevelopmentRelatedQuestion(userQuestion);
 
     let assistantAnswer;
-
     if (isWebDevelopmentQuestion) {
-      try {
-        // If the question is related to web development, use AI-generated answer
-        const completion = await openai.Completion.create({
-          engine: 'text-davinci-001',
-          prompt: userQuestion,
-          max_tokens: 150, // Adjust the max_tokens based on how long you want the answer to be
-        });
-        assistantAnswer = completion.data.choices[0].text;
-      } catch (err) {
-        console.log(err);
-        // Handle any error that occurs during AI completion
-        // You may want to use a predefined fallback response in case of errors
-        assistantAnswer = "I encountered an error while processing the answer.";
-      }
+      // Use AI-generated answer using the text-davinci-002 model
+      const completion = await openai.createCompletion({
+        model: 'text-davinci-002',
+        prompt: userQuestion,
+      });
+      assistantAnswer = completion.data.choices[0].text;
     } else {
       // If the question is not related to web development, reply with a default message
       assistantAnswer = "I am not fielded this type of question.";
@@ -74,15 +64,12 @@ exports.findAnswer = async (req, res) => {
   }
 };
 
-
-
 // Helper function to check if a question is related to web development
 function isWebDevelopmentRelatedQuestion(question) {
-  // Implement your logic to determine if the question is related to web development
-  // For example, you can check for keywords related to web development in the question
-  const webDevKeywords = ['web development', 'frontend', 'backend', 'HTML', 'CSS',"mern", 'JavaScript', 'framework'];
+  const webDevKeywords = ['web development', 'frontend', 'backend', 'HTML', 'CSS', 'JavaScript', 'framework'];
   return webDevKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
-}
+} 
+
 
 
 

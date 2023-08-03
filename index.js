@@ -9,8 +9,6 @@ const dotenv = require('dotenv');
 dotenv.config({ path: 'config.env' });
 const app = express();
 
-// app.use(cors());
-
 const URL = process.env.FRONTENDURL
 console.log("URL", process.env.FRONTENDURL)
 app.use(cors({
@@ -24,55 +22,28 @@ const bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
 
+ 
+                        
+    const apirouter = require('./routes/Index')
 
-// const { Configuration, OpenAIApi } = require("openai");
+    app.use("/", apirouter)
 
-// const ApiKey = process.env.OPENAI_API_KEY
+    mongoose.connect(`${process.env.DB_URL}`, {
+        useNewUrlParser: true,
+        serverSelectionTimeoutMS: 5000,
+        autoIndex: false, // Don't build indexes 
+        maxPoolSize: 10, // Maintain up to 10 socket connections
+        serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+        socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+        family: 4 // Use IPv4, skip trying IPv6 
+    }).then(() => {
+        console.log('MongoDB connected successfully');
+    }).catch((err) => {
+        console.error('MongoDB connection error: ', err);
+    });
 
-// const configuration = new Configuration({
-    //     apiKey: ApiKey,
-    // });
-    
-    // const openai = new OpenAIApi(configuration);
-    // //console.log("openai", openai)
-    // app.post("/find", async (req, res) => {
-        //     try {
-            //         const completion = await openai.createCompletion({
-                //             model: "text-davinci-001",
-                //             prompt: "Whats is the capital of india??",
-                //         });
-                //         console.log(completion.data.choices[0].text);
-                //         res.json({
-                    //             response: completion.data.choices[0].text,
-                    //             status: 200
-                    
-                    //         })
-                    //     } catch (error) {
-                        //         console.log(error)
-                        //     }
-                        
-                        // })
-                        
-                        const apirouter = require('./routes/Index')
-                        
-                        app.use("/", apirouter)
-                        
-                        mongoose.connect(`${process.env.DB_URL}`, {
-                            useNewUrlParser: true,
-                            serverSelectionTimeoutMS: 5000,
-                            autoIndex: false, // Don't build indexes 
-                            maxPoolSize: 10, // Maintain up to 10 socket connections
-                            serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-                            socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-                            family: 4 // Use IPv4, skip trying IPv6 
-                        }).then(() => {
-                            console.log('MongoDB connected successfully');
-                        }).catch((err) => {
-                            console.error('MongoDB connection error: ', err);
-                        });
-                        
-                        app.get('/', (req, res) => {
-                            res.json({
+    app.get('/', (req, res) => {
+        res.json({
         "msg": "Herrr",
         status: true
     })

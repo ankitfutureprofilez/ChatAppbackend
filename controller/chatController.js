@@ -93,7 +93,6 @@ function isWebCompanyRelatedQuestion(question) {
 }
 function handleCompanyQuestion(question) {
   const companyResponses = `
-  My company name is future profileZ 
     My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.
     My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.
     My company has a Google Review rating of 4.9.
@@ -105,13 +104,29 @@ function handleCompanyQuestion(question) {
 
   // Check if the question contains any company-related keywords
   if (question.toLowerCase().includes("services")) {
-    return getCompanyResponse(lowercaseResponses, "services");
+    const answer = getCompanyResponse(lowercaseResponses, "services");
+    return {
+      question: "What services does your company provide?",
+      answer: answer,
+    };
   } else if (question.toLowerCase().includes("name")) {
-    return getCompanyResponse(lowercaseResponses, "name");
+    const answer = getCompanyResponse(lowercaseResponses, "name");
+    return {
+      question: "What is your company's name?",
+      answer: answer,
+    };
   } else if (question.toLowerCase().includes("about")) {
-    return getCompanyResponse(lowercaseResponses, "about");
+    const answer = getCompanyResponse(lowercaseResponses, "about");
+    return {
+      question: "Tell me about your company.",
+      answer: answer,
+    };
   } else if (question.toLowerCase().includes("review")) {
-    return getCompanyResponse(lowercaseResponses, "review");
+    const answer = getCompanyResponse(lowercaseResponses, "review");
+    return {
+      question: "What is your company's Google Review rating?",
+      answer: answer,
+    };
   } else {
     // If the question is not recognized, return a default response
     return "I'm sorry, I don't have the specific information you are looking for.";
@@ -130,6 +145,7 @@ function getCompanyResponse(paragraph, keyword) {
   const endIndex = paragraph.indexOf('\n', startIndex);
   return paragraph.substring(startIndex, endIndex);
 }
+
 
 
 

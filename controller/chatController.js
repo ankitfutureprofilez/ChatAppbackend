@@ -34,8 +34,7 @@ exports.findAnswer = async (req, res) => {
       model: 'text-davinci-001',
       prompt: prompt,
       max_tokens:150
-    }); 
- 
+    });  
     const assistantAnswer = completion.data.choices[0].text;
 
     // Filter the answer to ensure it relates to one of the specified fields

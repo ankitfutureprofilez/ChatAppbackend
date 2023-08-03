@@ -88,18 +88,18 @@ function isWebDevelopmentRelatedQuestion(question) {
 
 
 function isWebCompanyRelatedQuestion(question) {
-  const companyKeywords = /\b(company|services|location|review|about)\b/i;
+  const companyKeywords = ["Name", "Services","About","review"]
   return companyKeywords.test(question);
 }
 
 
 function handleCompanyQuestion(question) {
   const companyResponses = `
-    My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.
-    My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.
-    My company has a Google Review rating of 4.9.
-    Sure, I can provide some general information about my company. It is a web development company in Jaipur, India. My company works with PHP, Laravel, Shopify, Magento, and MERN Stack.
-  `;
+  My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.
+  My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.
+  My company has a Google Review rating of 4.9.
+  Sure, I can provide some general information about my company. It is a web development company in Jaipur, India. My company works with PHP, Laravel, Shopify, Magento, and MERN Stack.
+`;
 
   // Search for the question in the paragraph (ignoring case)
   const paragraph = companyResponses.toLowerCase();

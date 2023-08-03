@@ -91,26 +91,32 @@ function isWebCompanyRelatedQuestion(question) {
   const companyKeywords = /\b(company|services|location|review|about)\b/i;
   return companyKeywords.test(question);
 }
-// Function to handle different company-related questions using specific responses
+
+
 function handleCompanyQuestion(question) {
-  const companyResponses = {
-    'name': "My company Name is Future Profilez.",
-    'services': "My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.",
-    'location': "My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.",
-    'review': "My company has a Google Review rating of 4.9.",
-    'about': "Sure, I can provide some general information about my company. It is a web development company in Jaipur, India. My company works with PHP, Laravel, Shopify, Magento, and MERN Stack."
-  };
+  const companyResponses = `
+    My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.
+    My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.
+    My company has a Google Review rating of 4.9.
+    Sure, I can provide some general information about my company. It is a web development company in Jaipur, India. My company works with PHP, Laravel, Shopify, Magento, and MERN Stack.
+  `;
 
-  const keywords = Object.keys(companyResponses);
+  // Search for the question in the paragraph (ignoring case)
+  const paragraph = companyResponses.toLowerCase();
+  const lowercaseQuestion = question.toLowerCase();
 
-  for (const keyword of keywords) {
-    if (question.toLowerCase().includes(keyword)) {
-      return companyResponses[keyword];
-    }
+  // Check if the question appears in the paragraph
+  if (paragraph.includes(lowercaseQuestion)) {
+    // If found, return the relevant part of the paragraph containing the answer
+    const startIndex = paragraph.indexOf(lowercaseQuestion);
+    const endIndex = paragraph.indexOf('\n', startIndex); // Find the end of the line
+    return companyResponses.substring(startIndex, endIndex);
+  } else {
+    // If not found, return a default response
+    return "I'm sorry, I don't have the specific information you are looking for.";
   }
-
-  return "I am not fielded this type of question.";
 }
+
 
 
 // exports.findAnswer = async (req, res) => {

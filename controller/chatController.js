@@ -79,7 +79,7 @@ function isWebDevelopmentRelatedQuestion(question) {
 
 // Helper function to check if a question is related to your company
 function isCompanyRelatedQuestion(question) {
-  const companyKeywords = ["My company is future profilez ",
+  const companyKeywords = [" future profilez ",
     " my company Services  Mobile,E-business,PHP,Laravel Development,CakePHP Development,Zend Development,CodeIgniter Development,Yii Development,Custom PHP Development,PHP MySQL Development",
     "my Company Google Review 4.9 in all time my company Location Office No. D-105B, G-4, Golden OAK-1, Devi Marg,it is a web development company in jaipur india.my Company Working Time is 9:30 AM  to 6:30 PM  Bani Park, Jaipur, Rajasthan 302016."];
   return companyKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));

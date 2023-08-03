@@ -31,7 +31,7 @@ exports.findAnswer = async (req, res) => {
     if (isWebDevelopmentQuestion) {
       // Use AI-generated answer using the text-davinci-002 model
       const completion = await openai.createCompletion({
-        model: 'text-davinci-001',
+        model: 'ada-search-document',
         prompt: userQuestion,
         max_tokens: 150,
       });
@@ -68,7 +68,7 @@ exports.findAnswer = async (req, res) => {
 
 // Helper function to check if a question is related to web development
 function isWebDevelopmentRelatedQuestion(question) {
-  const webDevKeywords = ['MEAN', "React", "Node", "MERN", 'HTML', 'CSS', 'JavaScript', 'framework'];
+  const webDevKeywords = ['MEAN', "React", "Node", "MERN", 'HTML', 'CSS', 'JavaScript', 'fram ework'];
   return webDevKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
 }
 

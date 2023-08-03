@@ -29,7 +29,7 @@ exports.findAnswer = async (req, res) => {
     const isWebDevelopmentQuestion = isWebDevelopmentRelatedQuestion(userQuestion);
     const iscompanyQuestion = isWebCompanyRelatedQuestion(userQuestion)
     let assistantAnswer;
-    if (isWebDevelopmentQuestion ) {
+    if (isWebDevelopmentQuestion) {
       // Use AI-generated answer using the text-davinci-002 model
       const completion = await openai.createCompletion({
         model: 'text-ada-001',
@@ -37,24 +37,18 @@ exports.findAnswer = async (req, res) => {
         max_tokens: 150,
       });
       assistantAnswer = completion.data.choices[0].text;
-    }
-    
-    else {
-      // If the question is not related to web development, reply with a default message
-      assistantAnswer = "I am not fielded this type of question.";
-    }
-    
-    if(iscompanyQuestion){
+    } else if (isCompanyQuestion) {
+      // Use AI-generated answer using the text-davinci-002 model for company-related questions
       const completion = await openai.createCompletion({
         model: 'text-ada-001',
         prompt: userQuestion,
         max_tokens: 150,
       });
-      assistantAnswer = completion.data.choices[0].text; }
-      else {
-        // If the question is not related to web development, reply with a default message
-        assistantAnswer = "I am not fielded this type of question.";
-      }     
+      assistantAnswer = completion.data.choices[0].text;
+    } else {
+      // If the question is not related to web development or company, reply with a default message
+      assistantAnswer = "I am not fielded this type of question.";
+    }  
     // Save the user question and the assistant's answer to the MongoDB collection
     const savedEntry = await QuestionAnswer.create({
       question: userQuestion,

@@ -27,8 +27,9 @@ exports.findAnswer = async (req, res) => {
 
     // Check if the user's question is related to web development
     const isWebDevelopmentQuestion = isWebDevelopmentRelatedQuestion(userQuestion);
+    const iscompanyQuestion = isWebCompanyRelatedQuestion(userQuestion)
     let assistantAnswer;
-    if (isWebDevelopmentQuestion) {
+    if (isWebDevelopmentQuestion || iscompanyQuestion) {
       // Use AI-generated answer using the text-davinci-002 model
       const completion = await openai.createCompletion({
         model: 'text-ada-001',
@@ -74,7 +75,10 @@ function isWebDevelopmentRelatedQuestion(question) {
 
 
 
-
+function isWebCompanyRelatedQuestion(question) {
+  const CompanyKeywords = ["Future Profilez", "company services is Mern , react ,node and Mean","company location is jaipur India"];
+  return CompanyKeywords.some((keyword) => question.toLowerCase().includes(keyword.toLowerCase()));
+}
 
 
 

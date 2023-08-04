@@ -19,14 +19,14 @@ exports.findAnswer = async (req, res) => {
     const fields = ['React.js', 'Node.js', 'PHP', 'react js']; // Specify the relevant fields
     const companyDetails = "My company is future profilez and it is a web development company in jaipur india."; // Pass your company details in the request body
     const questions = `
-    Info: My company name is future profilez.
-    Info: Our location is in Bani Park jaipur india. 
-    Info: My company Services  Mobile,E-business, PHP,Laravel Development,CakePHP Development,Zend Development,CodeIgniter Development,Yii Development,Custom PHP Development,PHP MySQL Development
-    Info: My company website https://futureprofilez.com
-    Info: Company owner Mr.Vishal Solanki.
-    Info: Company contact details are whatsapp no +919983333334, info@futureprofilez.com, +91-9983333334
-    Info: We works on all web development technologies such as react js, node js. 
-    `
+      Info: My company name is future profilez.
+      Info: Our location is in Bani Park jaipur india. 
+      Info: My company Services  Mobile,E-business, PHP,Laravel Development,CakePHP Development,Zend Development,CodeIgniter Development,Yii Development,Custom PHP Development,PHP MySQL Development
+      Info: My company website https://futureprofilez.com
+      Info: Company owner Mr.Vishal Solanki.
+      Info: Company contact details are whatsapp no +919983333334, info@futureprofilez.com, +91-9983333334
+      Info: We works on all web development technologies such as react js, node js. 
+    `;
 
     if (!userQuestion || !companyDetails) {
       return res.status(400).json({
@@ -44,7 +44,7 @@ exports.findAnswer = async (req, res) => {
     const completion = await openai.createCompletion({
       model: 'text-davinci-002',
       prompt: prompt,
-      max_tokens: 150
+      max_tokens: 256
     });
     const assistantAnswer = completion.data.choices[0].text;
     const savedEntry = await QuestionAnswer.create({

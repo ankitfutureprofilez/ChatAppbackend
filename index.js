@@ -1,5 +1,3 @@
-// app.js
-//import express from "express"
 const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
@@ -10,10 +8,10 @@ dotenv.config({ path: 'config.env' });
 const app = express();
 
 const URL = process.env.FRONTENDURL
-console.log("URL", process.env.FRONTENDURL)
+console.log("URL", process.env.FRONTENDURL);
+
 app.use(cors({
-    origin: URL,
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: "*",
   }));
 const server = http.createServer(app);
 const mongoose = require("mongoose")
@@ -29,21 +27,21 @@ app.use(bodyParser.json())
     mongoose.connect(`${process.env.DB_URL}`, {
         useNewUrlParser: true,
         serverSelectionTimeoutMS: 5000,
-        autoIndex: false, // Don't build indexes 
-        maxPoolSize: 10, // Maintain up to 10 socket connections
-        serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
-        socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-        family: 4 // Use IPv4, skip trying IPv6 
+        autoIndex: false,  
+        maxPoolSize: 10,  
+        serverSelectionTimeoutMS: 5000, 
+        socketTimeoutMS: 45000, 
+        family: 4  
     }).then(() => {
         console.log('MongoDB connected successfully');
     }).catch((err) => {
-        console.error('MongoDB connection error: ', err);
+        console.error('MongoDB CONNECTION ERROR =>>: ', err);
     });
 
     app.get('/', (req, res) => {
         res.json({
-        "msg": "Herrr",
-        status: true
+        "msg": "Active",
+        status: 200
     })
 })
 
@@ -51,17 +49,6 @@ app.use(bodyParser.json())
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 const io = socketio(server, { cors: { origin: '*' } });
 
-// const io = new Server(server,{
-//     cors:{
-    //         //origin: "https://earnest-frangollo-98f50d.netlify.app/",
-    //         reconnect: true
-//     }
-// });
-
-
-
- //io.set('origins', 'https://earnest-frangollo-98f50d.netlify.app/');
-//console.log("io", io)
 io.on('connection', (socket) => {
     console.log(`user connected ${socket.id}`);
     socket.on('join-room', (data) => {

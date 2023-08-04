@@ -49,7 +49,7 @@ exports.findAnswer = async (req, res) => {
 //'text-curie-001',
 // temperature:0.5,
     const completion = await openai.createCompletion({
-      model: 'text-davinci-003',
+      model: 'text-davinci-001',
       prompt: prompt,
       temperature:0.8,
       max_tokens:150

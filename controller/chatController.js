@@ -18,14 +18,13 @@ exports.findAnswer = async (req, res) => {
     const userQuestion = req.body.question;
     const fields = ['React.js', 'Node.js', 'PHP', 'react js']; // Specify the relevant fields
     const companyDetails = "My company is future profilez and it is a web development company in jaipur india."; // Pass your company details in the request body
+    
     const questions = `
-      Info: My company name is future profilez.
-      Info: Our location is in Bani Park jaipur india. 
-      Info: My company Services  Mobile,E-business, PHP,Laravel Development,CakePHP Development,Zend Development,CodeIgniter Development,Yii Development,Custom PHP Development,PHP MySQL Development
-      Info: My company website https://futureprofilez.com
-      Info: Company owner Mr.Vishal Solanki.
-      Info: Company contact details are whatsapp no +919983333334, info@futureprofilez.com, +91-9983333334
-      Info: We works on all web development technologies such as react js, node js. 
+    Q. Our company future profilez is location is in Bani Park jaipur india. 
+    Q. Our website is https://futureprofilez.com
+    Q. We works on all web development technologies such as react js, node js,php ,mobile app 
+    Q. Our Company owner Mr.Vishal Solanki.
+    Q. If user ask then our contact details are whatsapp no +919983333334, info@futureprofilez.com, +91-9983333334. 
     `;
 
     if (!userQuestion || !companyDetails) {
@@ -35,16 +34,26 @@ exports.findAnswer = async (req, res) => {
       });
     }
 
-    const prompt = `Prompt: You are an AI Assistant for a web development company. Read belows questions.
-      ${questions}
-      Please provide answer based on above information given. If my query not matches with above or try to find it on our website https://futureprofilez.com or search it on google then give relevent answer for that query based on my business and if query is not related to web develpment then deny with a pleasent message to provide any information.
-      My question is "${userQuestion}"
+    const prompt = `Prompt: You are an AI Assistant for a web development company.
+      Read belows details of our company to help users ${questions}
+      '''
+      Please provide answer based on above information given. If my query not matches with above or try to find it on our website https://futureprofilez.com or search it on google then give relevent answer for that query based on my business
+      '''
+      And if query is not related to web develpment then deny with a pleasent message.
+      '''
+      Answer their queries and ask other related information Query "${userQuestion}"
     `;
-
+//text-ada-001
+//text-davinci-002
+//text-davinci-001
+//'text-curie-001',
+// temperature:0.5,
     const completion = await openai.createCompletion({
-      model: 'text-davinci-002',
+      model: 'text-davinci-003',
       prompt: prompt,
-      max_tokens: 256
+      temperature:0.8,
+      max_tokens:150
+  
     });
     const assistantAnswer = completion.data.choices[0].text;
     const savedEntry = await QuestionAnswer.create({

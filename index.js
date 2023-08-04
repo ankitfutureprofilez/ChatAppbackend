@@ -22,8 +22,6 @@ const bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
 
- 
-                        
     const apirouter = require('./routes/Index')
 
     app.use("/", apirouter)

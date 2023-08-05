@@ -10,10 +10,11 @@ const ApiKey = process.env.OPENAI_API_KEY
 
 const configuration = new Configuration({
   apiKey: ApiKey,
-
+  organization:"org-4cqR430YO6PkKj2kizRiMY76",
 });
 
 const openai = new OpenAIApi(configuration);
+
 exports.findAnswer = async (req, res) => {
   try {
     const userQuestion = req.body.question;
@@ -153,7 +154,7 @@ function isWebCompanyRelatedQuestion(question) {
 // Function to handle different company-related questions using specific responses
 function handleCompanyQuestion(question) {
   const companyResponses = {
-    'name': "My company Name is Future Profilez.",
+    'name':     "My company Name is Future Profilez.",
     'services': "My company provides services in Mobile, E-business, PHP, Laravel Development, CakePHP Development, Zend Development, CodeIgniter Development, Yii Development, Custom PHP Development, PHP MySQL Development.",
     'location': "My company is located at Office No. D-105B, G-4, Golden OAK-1, Devi Marg, Bani Park, Jaipur, Rajasthan 302016.",
     'review': "My company has a Google Review rating of 4.9.",

@@ -20,16 +20,17 @@ exports.findAnswer = async (req, res) => {
     const fields = ['React.js', 'Node.js', 'PHP', 'react js']; // Specify the relevant fields
     const companyDetails = "My company is future profilez and it is a web development company in jaipur india."; // Pass your company details in the request body
     
-    const questions = `
-    Q. Our company future profilez is location is in Bani Park jaipur india. 
-    Q. Our website is https://futureprofilez.com
-    Q. our company any opening for fresher & interns can you visit our website link https://futureprofilez.com/career/
-     Q. our company any opening for experince  
-     Q. Our company opening for experince  for visit our website link https://futureprofilez.com/career/ and connect with HR. Harsha . contant number +91-9983333334 please submit your resume on whatapps and email's 
-    Q. We works on all web development technologies such as react js, node js,php ,mobile app 
-    Q. Our Company owner Mr.Vishal Solanki.
-    Q. If user ask then our contact details are whatsapp no +919983333334, info@futureprofilez.com, +91-9983333334. 
-    `;
+    // const questions = `
+    // Q. Our company future profilez is location is in Bani Park jaipur india. 
+    // Q. Our website is https://futureprofilez.com
+    // Q. Our company has always vacancy for fresher , intern and experince , can you share your resume by visiting our website.
+    //  https://futureprofilez.com/career/
+   
+    //  Q. Our company opening for experince  for visit our website link https://futureprofilez.com/career/ and connect with HR. Harsha . contant number +91-9983333334 please submit your resume on whatapps and email's 
+    // Q. We works on all web development technologies such as react js, node js,php ,mobile app 
+    // Q. Our Company owner Mr.Vishal Solanki.
+    // Q. If user ask then our contact details are whatsapp no +919983333334, info@futureprofilez.com, +91-9983333334. 
+    // `;
 
     if (!userQuestion || !companyDetails) {
       return res.status(400).json({
@@ -38,25 +39,25 @@ exports.findAnswer = async (req, res) => {
       });
     }
 
-    const prompt = `Prompt: You are an AI Assistant for a web development company.
-      Read belows details of our company to help users ${questions}
-      '''
-      Please provide answer based on above information given. If my query not matches with above or try to find it on our website https://futureprofilez.com or search it on google then give relevent answer for that query based on my business
-      '''
-      And if query is not related to web develpment then deny with a pleasent message.
-      '''
-      Answer their queries and ask other related information Query "${userQuestion}"
-    `;
+    // const prompt = `Prompt: You are an AI Assistant for a web development company.
+    //   Read belows details of our company to help users ${questions}
+    //   '''
+    //   Please provide answer based on above information given. If my query not matches with above or try to find it on our website https://futureprofilez.com or search it on google then give relevent answer for that query based on my business
+    //   '''
+    //   And if query is not related to web develpment then deny with a pleasent message.
+    //   '''
+    //   Answer their queries and ask other related information Query "${userQuestion}"
+    // `;
 //text-ada-001
 //text-davinci-002
 //text-davinci-001
 //'text-curie-001',
 // temperature:0.5,
-    const completion = await openai.createCompletion({
-      model: 'text-davinci-002' ,
+    const completion = await openai.createChatCompletion({
+      model: 'gpt-3.5-turbo' ,
       prompt: prompt,
-      temperature:0.8,
-      max_tokens:150
+     // temperature:0.8,
+  //    max_tokens:150
   
     });
     const assistantAnswer = completion.data.choices[0].text;

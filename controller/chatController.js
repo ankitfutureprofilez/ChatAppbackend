@@ -10,6 +10,7 @@ const ApiKey = process.env.OPENAI_API_KEY
 
 const configuration = new Configuration({
   apiKey: ApiKey,
+
 });
 
 const openai = new OpenAIApi(configuration);
@@ -22,6 +23,9 @@ exports.findAnswer = async (req, res) => {
     const questions = `
     Q. Our company future profilez is location is in Bani Park jaipur india. 
     Q. Our website is https://futureprofilez.com
+    Q. our company any opening for fresher & interns can you visit our website link https://futureprofilez.com/career/
+     Q. our company any opening for experince  
+     Q. Our company opening for experince  for visit our website link https://futureprofilez.com/career/ and connect with HR. Harsha . contant number +91-9983333334 please submit your resume on whatapps and email's 
     Q. We works on all web development technologies such as react js, node js,php ,mobile app 
     Q. Our Company owner Mr.Vishal Solanki.
     Q. If user ask then our contact details are whatsapp no +919983333334, info@futureprofilez.com, +91-9983333334. 

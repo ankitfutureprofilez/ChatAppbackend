@@ -4,9 +4,11 @@ const userController = require('../controller/userController')
 
 const chatController = require('../controller/chatController')
 
+const Aicontroller = require('../controller/Aicontroller')
+
 const verifyUserToken = require('../middleware/Auth')
 
-routes.post("/findAnswer",chatController.findAnswer)
+routes.post("/findAnswer", chatController.findAnswer)
 
 routes.post('/signup', userController.singup)
 
@@ -21,7 +23,12 @@ routes.post('/chat', verifyUserToken, chatController.sendMessage)
 routes.get('/chat/:receiveId', verifyUserToken, chatController.chatsMessageList)
 
 
+
 routes.post('/conversion', verifyUserToken, chatController.conversion)
+
+routes.post('/find', chatController.find)
+
+
 
 
 

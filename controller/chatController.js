@@ -8,7 +8,6 @@ require('dotenv').config();
 const natural = require('natural');
 const tokenizer = new natural.WordTokenizer();
 const nounInflector = new natural.NounInflector();
-
 // KEYWORD EXTRACTOR
 function extractKeywords(userQuery) {
   const tokens = tokenizer.tokenize(userQuery);
@@ -73,7 +72,7 @@ const openai = new OpenAIApi(configuration);
 
 exports.findAnswer = async (req, res) => {
   try {
-    const fetched = await Jobs.find({title:"react"});
+    const fetched = await Jobs.find({});
     console.log('Fetched', fetched);
     res.json({
       status: 200,

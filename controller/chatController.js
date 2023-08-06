@@ -1,60 +1,115 @@
 const Chat = require('../models/Messages')
+const Jobs = require('../models/Jobs')
 const user = require('../models/Users')
 const Conversation = require("../models/Converstion")
 const io = require('socket.io')(); // Don't need this since io is initialized in the server file
 const QuestionAnswer = require('../models/OpenAi')
 require('dotenv').config();
+const natural = require('natural');
+const tokenizer = new natural.WordTokenizer();
+const nounInflector = new natural.NounInflector();
 
+// KEYWORD EXTRACTOR
+function extractKeywords(userQuery) {
+  const tokens = tokenizer.tokenize(userQuery);
+  const keywords = tokens.filter(token => !natural.stopwords.includes(token));
+  const singularKeywords = keywords.map(keyword => nounInflector.singularize(keyword));
+  return singularKeywords;
+}
+
+// find information using text 
+// const data = await collection.find({ $text: { $search: userQuestion } }).toArray();
+
+const collectionKeywordMapping = {
+  jobs: ['job', 'opportunity', 'position'],
+  services: ['service', 'solution', 'offer'],
+};
+const additionDetails = [{
+  companyName:"Future profilez",
+  email:"info@futureprofilez.com",
+  phone:"9813089043"
+}];
+
+function getModelForCollectionName(collectionName) {
+  console.log("Jobs model",Jobs)
+  switch (collectionName) {
+    case 'jobs':
+      return Jobs;
+    // case 'services':
+    //   return Services;
+    default:
+      throw new Error(`Unknown collection name: ${collectionName}`);
+  }
+}
+
+async function searchCollections(keywords, collectionKeywordMapping) {
+  const searchResults = await Promise.all(
+    Object.entries(collectionKeywordMapping)
+      .filter(([collectionName, keywordList]) =>
+        keywords.some(keyword => keywordList.includes(keyword))
+      ).map(async ([collectionName, keywordList]) => {
+        const Model = getModelForCollectionName(collectionName);
+        console.log('Collection matched', Model);
+        const fetched = await Model.find({});
+        console.log('Fetched', fetched);
+        return fetched;
+      })
+  );
+  return searchResults;
+}
+
+
+
+
+
+// Open API Configuration
 const { Configuration, OpenAIApi } = require("openai");
 const ApiKey = process.env.OPENAI_API_KEY
-
 const configuration = new Configuration({
   apiKey: ApiKey,
 });
-
 const openai = new OpenAIApi(configuration);
+
+
 exports.findAnswer = async (req, res) => {
   try {
-    const userQuestion = req.body.question;
-    const fields = ['React.js', 'Node.js', 'PHP', 'react js']; // Specify the relevant fields
-    const companyDetails = "My company is future profilez and it is a web development company in jaipur india."; // Pass your company details in the request body
+    const fetched = await Jobs.find({title:"react"});
+    console.log('Fetched', fetched);
+    res.json({
+      status: 200,
+      msg: 'Successfully !!',
+      data: fetched, 
+    });
+    return false;
+
+    const userQuestion = req.body.question || "Tell me about job opportunities in software development";
+    const keywords = extractKeywords(userQuestion); // extract keyword from users query
+    // will find some mached collection from our keywords
+    console.log("extracted keywords",keywords)
+    const searchResults = await searchCollections(keywords, collectionKeywordMapping);
+    const combinedData = [...additionDetails].concat(...searchResults);
+    const questions = combinedData;
     
-    const questions = `
-    Q. Our company future profilez is location is in Bani Park jaipur india. 
-    Q. Our website is https://futureprofilez.com
-    Q. We works on all web development technologies such as react js, node js,php ,mobile app 
-    Q. Our Company owner Mr.Vishal Solanki.
-    Q. If user ask then our contact details are whatsapp no +919983333334, info@futureprofilez.com, +91-9983333334. 
+    const prompt = `
+      I want you to act as and role play of a AI assitant of Future Profilez web development company.
+      '''
+      These are some information our company ${questions}
+      '''
+      Please provide answer based on above information given. 
+      If my query not matches with above or try to find it on our 
+      website https://futureprofilez.com or search it on google then give relevent answer 
+      for that query based on my business.
+      If query is not reletad to web or app development then deny with a pleasent information.
+      Answer their queries and ask other related information query is "${userQuestion}"
     `;
 
-    if (!userQuestion || !companyDetails) {
-      return res.status(400).json({
-        msg: 'Bad Request: Missing question or companyDetails field in the request body.',
-        status: 400,
-      });
-    }
-
-    const prompt = `Prompt: You are an AI Assistant for a web development company.
-      Read belows details of our company to help users ${questions}
-      '''
-      Please provide answer based on above information given. If my query not matches with above or try to find it on our website https://futureprofilez.com or search it on google then give relevent answer for that query based on my business
-      '''
-      And if query is not related to web develpment then deny with a pleasent message.
-      '''
-      Answer their queries and ask other related information Query "${userQuestion}"
-    `;
-//text-ada-001
-//text-davinci-002
-//text-davinci-001
-//'text-curie-001',
-// temperature:0.5,
     const completion = await openai.createCompletion({
       model: 'text-davinci-002' ,
       prompt: prompt,
-      temperature:0.8,
+      temperature:0,
       max_tokens:150
-  
     });
+
     const assistantAnswer = completion.data.choices[0].text;
     const savedEntry = await QuestionAnswer.create({
       question: userQuestion,
@@ -66,16 +121,16 @@ exports.findAnswer = async (req, res) => {
       msg: 'Successfully Retrieved Answer',
       savedEntry: savedEntry, 
     });
-
   } catch (err) {
     console.log(err);
     res.json({
       err: err,
-      msg: 'Error Detected',
+      msg: 'Something went wrong !!',
       status: 400,
     });
   }
 };
+
 
 
 exports.conversion = (async (req, res) => {
@@ -104,7 +159,6 @@ exports.conversion = (async (req, res) => {
       status: 200,
       data: newconversation,
       msg: "Successfully Created"
-
     })
 
   } catch (err) {
@@ -115,8 +169,8 @@ exports.conversion = (async (req, res) => {
       status: 400
     });
   }
+});
 
-})
 
 exports.sendMessage = async (req, res) => {
   try {
@@ -159,7 +213,6 @@ exports.sendMessage = async (req, res) => {
     res.status(500).json({ error: "An error occurred while processing your request." });
   }
 };
-
 
 exports.chatsMessageList = (async (req, res) => {
   console.log(req.params)

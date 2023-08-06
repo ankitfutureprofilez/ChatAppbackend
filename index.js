@@ -2,9 +2,8 @@ const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
 const cors = require('cors');
+require('./config');
 
-const dotenv = require('dotenv');
-dotenv.config({ path: 'config.env' });
 const app = express();
 
 const URL = process.env.FRONTENDURL
@@ -14,37 +13,18 @@ app.use(cors({
     origin: "*",
   }));
 const server = http.createServer(app);
-const mongoose = require("mongoose")
 
 const bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
-
     const apirouter = require('./routes/Index')
-
     app.use("/", apirouter)
-
-    mongoose.connect(`${process.env.DB_URL}`, {
-        useNewUrlParser: true,
-        serverSelectionTimeoutMS: 5000,
-        autoIndex: false,  
-        maxPoolSize: 10,  
-        serverSelectionTimeoutMS: 5000, 
-        socketTimeoutMS: 45000, 
-        family: 4  
-    }).then(() => {
-        console.log('MongoDB connected successfully');
-    }).catch((err) => {
-        console.error('MongoDB CONNECTION ERROR =>>: ', err);
-    });
-
     app.get('/', (req, res) => {
         res.json({
         "msg": "Active",
         status: 200
     })
 })
-
 
 const Chat = require('./models/Messages'); // Assuming the correct path to your Messages model
 const io = socketio(server, { cors: { origin: '*' } });

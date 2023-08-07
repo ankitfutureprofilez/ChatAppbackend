@@ -102,11 +102,8 @@ exports.findAnswer = async (req, res) => {
       If query is not reletad to web or app development then deny with a pleasent information.
       Answer their queries and ask other related information query is "${userQuestion}"
     `;
-//text-ada-001
-//text-davinci-002
-//text-davinci-001
-//'text-curie-001',
-// temperature:0.5,
+    
+
     const completion = await openai.createCompletion({
       model: 'text-davinci-002',
       prompt: prompt,

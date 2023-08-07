@@ -1,5 +1,7 @@
-const Chat = require('../models/Messages')
-const Jobs = require('../models/Jobs')
+const Chat = require('../models/Messages');
+const Services = require('../models/Services');
+const Jobs = require('../models/Jobs');
+const Company = require('../models/Company')
 const user = require('../models/Users')
 const Conversation = require("../models/Converstion")
 const io = require('socket.io')(); // Don't need this since io is initialized in the server file
@@ -21,8 +23,15 @@ function extractKeywords(userQuery) {
 // const data = await collection.find({ $text: { $search: userQuestion } }).toArray();
 
 const collectionKeywordMapping = {
-  jobs: ['job', 'opportunity', 'position'],
-  services: ['service', 'solution', 'offer'],
+  jobs: ['job', "Job Openings", "Vacancies", "Career Opportunities", "Employment", "Join Our Team", 
+  "Apply Now", "IT Jobs", 'opportunity', 'position', "hiring", "opening",
+   "vacancy", "fresher", "experince"],
+
+  services: ['service', 'solution', 'offer', "Front-End ", "Mobile App ", "Back-End ", "CakePHP ",
+    , "Zend", "CodeIgniter", "  Yii", "WordPress ", "Ecommerce ", "Magento ", "Shopify ", "Joomla ", "Drupal CMS ", "Smart Job Board ", "Social Engine ", "Elgg ", "Custom PHP", "PHP MySQL ", "flutter", "Ruby On Rails", "Perl", "Angular JS", "Node JS", "Open Cart", "Swoopo Clone"],
+  
+  
+    company: ['name', 'website', 'email', 'owner', 'year', "number","Contact","Email"]
 };
 const additionDetails = [{
   companyName: "Future profilez",
@@ -35,8 +44,10 @@ function getModelForCollectionName(collectionName) {
   switch (collectionName) {
     case 'jobs':
       return Jobs;
-    // case 'services':
-    //   return Services;
+    case 'services':
+      return Services;
+    case 'company':
+      return Company;
     default:
       throw new Error(`Unknown collection name: ${collectionName}`);
   }
@@ -48,10 +59,11 @@ async function searchCollections(keywords, collectionKeywordMapping) {
       .filter(([collectionName, keywordList]) =>
         keywords.some(keyword => keywordList.includes(keyword))
       ).map(async ([collectionName, keywordList]) => {
+        console.log("collectionName", collectionName)
         const Model = getModelForCollectionName(collectionName);
         console.log('Collection matched', Model);
         const fetched = await Model.find({});
-        console.log('Fetched', fetched);
+        console.log('Fetcheds', fetched);
         return fetched;
       })
   );
@@ -64,15 +76,12 @@ async function searchCollections(keywords, collectionKeywordMapping) {
 
 // Open API Configuration
 const { Configuration, OpenAIApi } = require("openai");
+
 const ApiKey = process.env.OPENAI_API_KEY
 const configuration = new Configuration({
   apiKey: ApiKey,
 });
 const openai = new OpenAIApi(configuration);
-
-
-
-
 
 
 exports.findAnswer = async (req, res) => {
@@ -86,16 +95,18 @@ exports.findAnswer = async (req, res) => {
     //   msg: "success",
     //   data: fetched
     // });
-    // console.log("data",data)
+
     // return false;
 
-   
+
     const userQuestion = req.body.question || "Tell me about job opportunities in software development";
     const keywords = extractKeywords(userQuestion); // extract keyword from users query
     // will find some mached collection from our keywords
     console.log("extracted keywords", keywords)
     const searchResults = await searchCollections(keywords, collectionKeywordMapping);
+    console.log("searchResults", searchResults);
     const combinedData = [...additionDetails].concat(...searchResults);
+    console.log("combinedData", combinedData);
     const questions = combinedData;
 
     const prompt = `

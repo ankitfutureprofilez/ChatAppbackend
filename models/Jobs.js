@@ -2,9 +2,13 @@ const mongoose = require('mongoose');
 
 const jobsSchema = mongoose.Schema({
   title: String,
-  salery: String,
+  salary: String,
   experince: String,
   keyword: String,
+  Desc: String,
+  Time:String,
+  Shift:String,
+  position :String
 });
 
 

@@ -15,7 +15,6 @@ function extractKeywords(userQuery) {
   const singularKeywords = keywords.map(keyword => nounInflector.singularize(keyword));
   return singularKeywords;
 }
-
 // find information using text 
 // const data = await collection.find({ $text: { $search: userQuestion } }).toArray();
 
@@ -101,7 +100,7 @@ exports.findAnswer = async (req, res) => {
       If query is not reletad to web or app development then deny with a pleasent information.
       Answer their queries and ask other related information query is "${userQuestion}"
     `;
-    
+
 
     const completion = await openai.createCompletion({
       model: 'text-davinci-002' ,

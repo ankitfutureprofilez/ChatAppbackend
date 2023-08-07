@@ -28,11 +28,11 @@ routes.get('/chat/:receiveId', verifyUserToken, chatController.chatsMessageList)
 
 routes.post('/conversion', verifyUserToken, chatController.conversion)
 
-routes.post('/job', jobcontoller.jobs)
+routes.post('/job',verifyUserToken ,jobcontoller.jobs)
 
-routes.post("/service", ServicesController.services)
+routes.post("/service",verifyUserToken ,ServicesController.services)
 
-routes.post('/company', CompanyContorller.CompanyDetilas)
+routes.post('/company', verifyUserToken,CompanyContorller.CompanyDetilas)
 
 
 

@@ -23,15 +23,18 @@ function extractKeywords(userQuery) {
 // const data = await collection.find({ $text: { $search: userQuestion } }).toArray();
 
 const collectionKeywordMapping = {
-  jobs: ['job', "Job Openings", "Vacancies", "Career Opportunities", "Employment", "Join Our Team", 
-  "Apply Now", "IT Jobs", 'opportunity', 'position', "hiring", "opening",
-   "vacancy", "fresher", "experince"],
+  jobs: ['job', "Job Openings", "Vacancies", "Career Opportunities", "Employment", "Join Our Team",
+    "Apply Now", "IT Jobs", 'opportunity', 'position', "hiring", "opening", "hire",
+    "vacancy", "fresher", "experince", 'php', 'node js job', 'mern stack job', 'mern job'],
 
-  services: ['service', 'solution', 'offer', "Front-End ", "Mobile App ", "Back-End ", "CakePHP ",
-    , "Zend", "CodeIgniter", "  Yii", "WordPress ", "Ecommerce ", "Magento ", "Shopify ", "Joomla ", "Drupal CMS ", "Smart Job Board ", "Social Engine ", "Elgg ", "Custom PHP", "PHP MySQL ", "flutter", "Ruby On Rails", "Perl", "Angular JS", "Node JS", "Open Cart", "Swoopo Clone"],
-  
-  
-    company: ['name', 'website', 'email', 'owner', 'year', "number","Contact","Email"]
+  services: ['service', "framework", "service container", "routing", "ORM",
+    " Ecommerce Development", " Ecommerce website",
+    " Search Engine Optimization", " Organic Traffic", " Keyword Research", "Link Building",
+    "web applications", "Zend framework", "API integration",
+    "content management", "modules", "responsive design", "SEO optimization", "security",
+    'solution', "product uploads", "payment gateway integration", 'offer', " online store", "Front-End ", "Mobile App ", "Back-End ", "CakePHP ",
+    "portfolio", "works", 'projects', 'examples', 'links', "Zend", "CodeIgniter", "  Yii", "WordPress ", "development", "Ecommerce ", "Magento ", "Shopify ", "Joomla ", "Drupal CMS ", "Smart Job Board ", "Social Engine ", "Elgg ", "Custom PHP", "PHP MySQL ", "flutter", "Ruby On Rails", "Perl", "Angular JS", "Node JS", "Open Cart", "Swoopo Clone"],
+  company: ['name', 'website', 'email', 'owner', 'year', "number", "Contact", "Email", 'links', "reach", 'loaction', 'address', 'emplyees']
 };
 const additionDetails = [{
   companyName: "Future profilez",
@@ -78,28 +81,18 @@ async function searchCollections(keywords, collectionKeywordMapping) {
 const { Configuration, OpenAIApi } = require("openai");
 
 const ApiKey = process.env.OPENAI_API_KEY
+const Orgkey= process.env.ORG_API_KEY
 const configuration = new Configuration({
   apiKey: ApiKey,
+  organization: Orgkey
 });
 const openai = new OpenAIApi(configuration);
 
 
 exports.findAnswer = async (req, res) => {
   try {
-
-    // const fetched = await Jobs.find({})
-    // console.log("Fetched", fetched)
-
-    // res.json({
-    //   status: 200,
-    //   msg: "success",
-    //   data: fetched
-    // });
-
-    // return false;
-
-
-    const userQuestion = req.body.question || "Tell me about job opportunities in software development";
+    const tesxt = req.body.question || "";
+    const userQuestion = tesxt.toLowerCase()
     const keywords = extractKeywords(userQuestion); // extract keyword from users query
     // will find some mached collection from our keywords
     console.log("extracted keywords", keywords)
@@ -111,23 +104,19 @@ exports.findAnswer = async (req, res) => {
 
     const prompt = `
       I want you to act as and role play of a AI assitant of Future Profilez web development company.
-      '''
-      These are some information our company ${questions}
-      '''
-      Please provide answer based on above information given. 
-      If my query not matches with above or try to find it on our 
-      website https://futureprofilez.com or search it on google then give relevent answer 
+      ###
+      Use these information ${questions} to answer.
+      ###
+      Try to find it on our website https://futureprofilez.com then give relevent answer 
       for that query based on my business.
-      If query is not reletad to web or app development then deny with a pleasent information.
-      Answer their queries and ask other related information query is "${userQuestion}"
+      If query is not reletad to us then deny with a pleasent information. answer this user query is "${userQuestion}"
     `;
 
-
     const completion = await openai.createCompletion({
-      model: 'text-davinci-002',
+      model: 'text-davinci-003',
       prompt: prompt,
       temperature: 0,
-      max_tokens: 150
+      max_tokens: 100
     });
 
     const assistantAnswer = completion.data.choices[0].text;

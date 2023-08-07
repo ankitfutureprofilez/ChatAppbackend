@@ -5,7 +5,7 @@ const servicesSchema = mongoose.Schema({
     Desc: String,
     Feature: String,
     keyword: String,
-
+    portfolio: [{type: String},]
 })
 
 

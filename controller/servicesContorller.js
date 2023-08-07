@@ -5,13 +5,14 @@ const servicesM= require("../models/Services")
 exports.services = (async (req, res) => {
     console.log(req.body)
     try {
-        const { title, Feature, Desc,keyword } = req.body
+        const { title, Feature, Desc,keyword,portfolio } = req.body
 
         const Result = new servicesM({
             title: title,
             Feature: Feature,
             Desc: Desc,
-            keyword:keyword
+            keyword:keyword,
+            portfolio:portfolio
         })
         console.log("Result", Result)
         const Data = await Result.save();

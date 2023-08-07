@@ -2,9 +2,11 @@ const routes = require("express").Router()
 
 const userController = require('../controller/userController')
 
-const chatController = require('../controller/chatController')
+const chatController = require('../controller/aiChatController')
 
 const Aicontroller = require('../controller/Aicontroller')
+
+const jobcontoller= require('../controller/jobcontroller')
 
 const verifyUserToken = require('../middleware/Auth')
 
@@ -26,7 +28,9 @@ routes.get('/chat/:receiveId', verifyUserToken, chatController.chatsMessageList)
 
 routes.post('/conversion', verifyUserToken, chatController.conversion)
 
-routes.post('/find', chatController.find)
+
+routes.post('/job',jobcontoller.jobs)
+
 
 
 

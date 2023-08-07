@@ -9,6 +9,8 @@ const natural = require('natural');
 const tokenizer = new natural.WordTokenizer();
 const nounInflector = new natural.NounInflector();
 // KEYWORD EXTRACTOR
+
+
 function extractKeywords(userQuery) {
   const tokens = tokenizer.tokenize(userQuery);
   const keywords = tokens.filter(token => !natural.stopwords.includes(token));
@@ -23,13 +25,13 @@ const collectionKeywordMapping = {
   services: ['service', 'solution', 'offer'],
 };
 const additionDetails = [{
-  companyName:"Future profilez",
-  email:"info@futureprofilez.com",
-  phone:"9813089043"
+  companyName: "Future profilez",
+  email: "info@futureprofilez.com",
+  phone: "9813089043"
 }];
 
 function getModelForCollectionName(collectionName) {
-  console.log("Jobs model",Jobs)
+  console.log("Jobs model", Jobs)
   switch (collectionName) {
     case 'jobs':
       return Jobs;
@@ -69,25 +71,33 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 
+
+
+
+
 exports.findAnswer = async (req, res) => {
   try {
-    const fetched = await Jobs.find({});
-    console.log('Fetched', fetched);
-    res.json({
-      status: 200,
-      msg: 'Successfully !!',
-      data: fetched, 
-    });
-    return false;
 
+    // const fetched = await Jobs.find({})
+    // console.log("Fetched", fetched)
+
+    // res.json({
+    //   status: 200,
+    //   msg: "success",
+    //   data: fetched
+    // });
+    // console.log("data",data)
+    // return false;
+
+   
     const userQuestion = req.body.question || "Tell me about job opportunities in software development";
     const keywords = extractKeywords(userQuestion); // extract keyword from users query
     // will find some mached collection from our keywords
-    console.log("extracted keywords",keywords)
+    console.log("extracted keywords", keywords)
     const searchResults = await searchCollections(keywords, collectionKeywordMapping);
     const combinedData = [...additionDetails].concat(...searchResults);
     const questions = combinedData;
-    
+
     const prompt = `
       I want you to act as and role play of a AI assitant of Future Profilez web development company.
       '''
@@ -103,10 +113,10 @@ exports.findAnswer = async (req, res) => {
 
 
     const completion = await openai.createCompletion({
-      model: 'text-davinci-002' ,
+      model: 'text-davinci-002',
       prompt: prompt,
-      temperature:0,
-      max_tokens:150
+      temperature: 0,
+      max_tokens: 150
     });
 
     const assistantAnswer = completion.data.choices[0].text;
@@ -118,7 +128,7 @@ exports.findAnswer = async (req, res) => {
       status: 200,
       data: assistantAnswer,
       msg: 'Successfully Retrieved Answer',
-      savedEntry: savedEntry, 
+      savedEntry: savedEntry,
     });
   } catch (err) {
     console.log(err);
@@ -175,7 +185,7 @@ exports.sendMessage = async (req, res) => {
   try {
     const receiverId = req.body.receiverId;
     const senderId = req.user.userId; // Assuming the authenticated user's ID is available in req.user.userId
-    
+
     const chatMessage = new Chat({
       message: req.body.message,
       userId: senderId,

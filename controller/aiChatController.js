@@ -7,6 +7,7 @@ const Conversation = require("../models/Converstion")
 const io = require('socket.io')(); // Don't need this since io is initialized in the server file
 const QuestionAnswer = require('../models/OpenAi')
 require('dotenv').config();
+const endent = require('endent');
 const natural = require('natural');
 const tokenizer = new natural.WordTokenizer();
 const nounInflector = new natural.NounInflector();
@@ -97,19 +98,19 @@ exports.findAnswer = async (req, res) => {
     // will find some mached collection from our keywords
     console.log("extracted keywords", keywords)
     const searchResults = await searchCollections(keywords, collectionKeywordMapping);
-    console.log("searchResults", searchResults);
     const combinedData = [...additionDetails].concat(...searchResults);
     console.log("combinedData", combinedData);
     const questions = combinedData;
-
+    // If query is not reletad to us then deny with a pleasent information
     const prompt = `
-      I want you to act as and role play of a AI assitant of Future Profilez web development company.
+      I want you to act as and role play of a AI assitant a web development company.
       ###
-      Use these information ${questions} to answer.
-      ###
-      Try to find it on our website https://futureprofilez.com then give relevent answer 
+      Try to find it on our website https://futureprofilez.com and from your knowledge and provide a helpful answer and ask next useful question related to their query.
       for that query based on my business.
-      If query is not reletad to us then deny with a pleasent information. answer this user query is "${userQuestion}"
+      If you need any info related to user query check from this (${questions}) to answer user query.
+
+      ###
+      User query is "${userQuestion}".
     `;
 
     const completion = await openai.createCompletion({
@@ -139,7 +140,6 @@ exports.findAnswer = async (req, res) => {
     });
   }
 };
-
 
 
 exports.conversion = (async (req, res) => {
